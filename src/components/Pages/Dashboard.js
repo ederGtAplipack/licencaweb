@@ -1,23 +1,45 @@
 ﻿// src/pages/Dashboard/Dashboard.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom"; // Importe o componente Link
 import api from "../../services/api";
+import { Chart } from "chart.js/auto"; // Importa Chart.js
 import "../../style.css";
 
 function Dashboard() {
     const [licencas, setLicencas] = useState([]);
     const [filtro, setFiltro] = useState("");
     const [username, setUsername] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState("");
+    const chartRef = useRef(null);
+    const chartInstance = useRef(null);
 
-    // Exemplo de busca de licenças via API
+
+    // Recupera o nome de usuário do localStorage
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+        if (storedUsername) {
+            setUsername(storedUsername);
+        }
+    }, []);
+
+    // Busca de licenças via API
     useEffect(() => {
         async function fetchLicencas() {
+            setLoading(true);
+            setErro("");
+
             try {
                 // Rota de busca pode ser ajustada para sua API
-                const { data } = await api.get("");
+                const { data } = await api.get("api/v1/licenca/GetAllWithDetails");
                 setLicencas(data);
             } catch (err) {
                 console.error("Erro ao carregar licenças", err);
+                setErro("Não foi possível carregar as licenças. Tente novamente mais tarde.");
+                //setLicencas([]); // Define como array vazio em caso de erro
+            } finally {
+                // Qualquer ação final, se necessário
+                setLoading(false);
             }
         }
         fetchLicencas();
@@ -29,6 +51,49 @@ function Dashboard() {
             campo?.toLowerCase().includes(filtro.toLowerCase())
         )
     );
+
+    // Atualiza o gráfico quando as licenças mudam
+    useEffect(() => {
+        if (!loading && licencas.length > 0) {
+            const softwareCount = licencas.reduce((acc, l) => {
+                acc[l.software] = (acc[l.software] || 0) + 1;
+                return acc;
+            }, {});
+
+            const labels = Object.keys(softwareCount);
+            const valores = Object.values(softwareCount);
+
+            if (chartInstance.current) {
+                chartInstance.current.destroy(); // Evita duplicar o gráfico
+            }
+
+            chartInstance.current = new Chart(chartRef.current, {
+                type: "bar",
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: "Licenças por Software",
+                            data: valores,
+                            backgroundColor: "rgba(75, 192, 192, 0.5)",
+                            borderColor: "rgba(75, 192, 192, 1)",
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: true, text: "Distribuição de Licenças" }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+    }, [licencas, loading]);
 
     /* Renderização do componente */
     return (
@@ -85,6 +150,10 @@ function Dashboard() {
                             
                             </div>
 
+                            {loading && <p>Carregando licenças...</p>}
+                            {erro && <p style={{ color: "red" }}>{erro}</p>}
+
+                            {!loading && !erro && ( 
                             <table className="session-table">
                                 <thead>
                                     <tr>
@@ -102,9 +171,9 @@ function Dashboard() {
                                 <tbody>
                                     {licencasFiltradas.map((l) => (
                                         <tr key={l.id}>
-                                            <td>{l.id}</td>
-                                            <td>{l.cliente}</td>
-                                            <td>{l.mac}</td>
+                                            <td>{l.numLic}</td>
+                                            <td>{l.nomeCliente}</td>
+                                            <td>{l.macAddress}</td>
                                             <td>{l.software}</td>
                                             <td>{l.ip}</td>
                                             <td>{l.dataAtivacao}</td>
@@ -116,12 +185,20 @@ function Dashboard() {
                                             </td>
                                         </tr>
                                     ))}
+                                        {licencasFiltradas.length === 0 && (
+                                            <tr>
+                                                <td colSpan="9" style={{ textAlign: "center" }}>
+                                                    Nenhuma licença encontrada
+                                                </td>
+                                            </tr>
+                                        )}
                                 </tbody>
-                            </table>
+                              </table>
+                            )}
                         </div>
 
-                        <div className="card">
-                            <canvas id="graficoSoftware" width="600" height="280"></canvas>
+                        <div className="card-h2">
+                            <canvas ref={chartRef} id="graficoSoftware" width="600" height="280"></canvas>
                         </div>
                     </section>
                 </main>

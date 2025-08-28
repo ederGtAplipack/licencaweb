@@ -61,7 +61,7 @@ export default function Login() {
                     )}
 
                     <form onSubmit={handleLogin} className="flex flex-col">
-                        <label className="text-sm text-gray-600 mb-1">Usuario ou E-mail</label>
+                        <label className="text-sm text-gray-600 mb-1">Usuario por enquanto</label>
                         <input
                             id="username"
                             // Alterado de "email" para "text"

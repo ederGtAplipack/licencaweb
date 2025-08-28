@@ -128,10 +128,12 @@ header {
   width: -webkit-fill-available;
 }
 
-.card h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #333;
+.card-h2 {
+        background-color: #ffffff;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333;
+        width: 100%
 }
 
 /* Barra de pesquisa */

@@ -58,7 +58,7 @@ const Login = () => {
                     )}
 
                     <div className="login-input-group">
-                        <label className="login-label">Usuario ou e-mail</label>
+                        <label className="login-label">Usuario por enquanto</label>
                         <input
                             type="text"
                             name="username"
