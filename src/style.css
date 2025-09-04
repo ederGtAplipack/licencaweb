@@ -52,11 +52,12 @@ header {
   margin-bottom: 30px;
 }
 
-    .sidebar .logo img {
-        margin-top: 10px;
-        max-width: 100%;
-        margin-bottom: 28px;
-    }
+/*logo aplicack*/
+.sidebar .logo img {
+    margin-top: 10px;
+    max-width: 100%;
+    margin-bottom: 28px;
+ }
 
 .sidebar nav ul {
   list-style: none;
@@ -109,8 +110,8 @@ header {
 
 /* Conteúdo principal */
 .main {
-  flex-grow: 1;
-  padding: 20px;
+  flex-grow: 2;
+  padding: 5px;
   overflow-y: auto;
 }
 
@@ -152,7 +153,26 @@ header {
   align-items: center;
   margin-bottom: 20px;
 }
+.card-header-filtro{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
 
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-newlic {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 40px;
+}
 /* Tabelas */
 table {
     width: -webkit-fill-available;
@@ -273,7 +293,7 @@ td a {
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 10px;
 }
 
 .form-group {
@@ -450,3 +470,112 @@ input.readonly {
   pointer-events: none;
 }
 
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 25px;
+    column-width: auto;
+    width: 420px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #444;
+    }
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: #fff;
+}
+
+    .btn-primary:hover {
+        background: #0069d9;
+    }
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+    margin-right: 10px;
+}
+
+    .btn-secondary:hover {
+        background: #5a6268;
+    }
+
+.btn-danger{
+    background: #dc3545;
+    color: #fff;
+    margin-right: 10px;
+}
+    .btn-danger:hover {
+        background: #c82333;
+    }
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

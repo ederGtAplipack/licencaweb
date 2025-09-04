@@ -1,0 +1,244 @@
+/* Estilos gerais para o overlay e o modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-ana {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+}
+
+.container-ana{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Título do formulário */
+.form-title {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+}
+
+/* Animação para a entrada do modal */
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Layout dos campos usando Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+}
+
+.form-group-ana {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-full {
+    grid-column: 1 / -1;
+}
+
+.form-group-half {
+    grid-column: span 1;
+}
+
+/* Estilos para label e input */
+.form-group-ana label {
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group-ana .form-control {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box; /* Garante que padding não adicione largura */
+}
+
+    .form-group-ana .form-control:focus {
+        border-color: #3498db;
+        outline: none;
+        box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+    }
+
+/* Estilo do botão de salvar */
+.modal-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.btn-primary {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+    }
+
+    .btn-primary:disabled {
+        background-color: #bdc3c7;
+        cursor: not-allowed;
+    }
+
+/* Mensagem de sucesso/erro */
+.info {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Estilo para o botão de fechar (exemplo) */
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #95a5a6;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+    .close-button:hover {
+        color: #34495e;
+    }
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .modal-ana {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+/* Modal de mensagem */
+.modal-message {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeInScale 0.3s ease-in-out;
+}
+
+    /* Texto dentro do modal */
+    .modal-message p {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+/* Animação de entrada */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Botão dentro do modal */
+.modal-message .btn {
+    min-width: 100px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 6px;
+}
+
+/* Cor diferenciada para sucesso/erro */
+.toast-success {
+    border-left: 6px solid #28a745;
+}
+
+.toast-error {
+    border-left: 6px solid #dc3545;
+}
+
+
+/*Paginação*/
+.pagination {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+}
+
+    .pagination .btn {
+        background: #007bff;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        transition: background 0.2s;
+    }
+
+        .pagination .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .pagination .btn:hover:not(:disabled) {
+            background: #0056b3;
+        }
+

@@ -1,15 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
-    "\\public\\img",
     "\\src",
-    "\\src\\assets",
     "\\src\\components",
+    "\\src\\components\\Licencas",
     "\\src\\components\\Login",
     "\\src\\components\\Pages",
+    "\\src\\components\\Pages\\Anagrafica",
+    "\\src\\components\\Pages\\Home",
+    "\\src\\Layouts",
     "\\src\\services"
   ],
-  "SelectedNode": "\\src\\services\\api.js",
+  "SelectedNode": "\\src\\components\\Pages\\Anagrafica\\FilterBar.js",
   "PreviewInSolutionExplorer": false
 }

@@ -27,7 +27,7 @@ export default function Login() {
             localStorage.setItem("expiration" ,response.data.expiration);   
 
             // Redireciona para a página principal após o login bem-sucedido    
-            navigate("/dashboard"); // Ajuste a rota conforme necessário
+            navigate("/dashboard/home"); // Ajuste a rota conforme necessário
 
         } catch (error) {
             console.error("Erro ao fazer login:", error);

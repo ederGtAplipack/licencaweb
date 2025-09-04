@@ -1,207 +1,232 @@
-Ôªø// src/pages/Dashboard/Dashboard.js
-import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom"; // Importe o componente Link
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../../services/api";
-import { Chart } from "chart.js/auto"; // Importa Chart.js
+import FilterBar from "../../components/Licencas/FilterBar";
+import LicenseTable from "../../components/Licencas/LicenseTable";
 import "../../style.css";
 
 function Dashboard() {
+    const GET_URL = "/api/v1/licencaquery/GetAllWithDetails";
+    const POST_URL = "/CreateNewlin"; // Verifique a rota correta no backend
+
+    const [username] = useState(localStorage.getItem("username") || "Usu·rio");
     const [licencas, setLicencas] = useState([]);
+    const [licencaSelect, setLicencaSelect] = useState({
+        idCliente: "",
+        nomeCliente: "",
+        macAddress: "",
+        software: "",
+        ip: "",
+        scade: "",
+        status: "Ativa"
+    });
     const [filtro, setFiltro] = useState("");
-    const [username, setUsername] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [erro, setErro] = useState("");
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
+    const [addModal, setAddModal] = useState(false);
 
+    const openCloseModal = () => setAddModal(!addModal);
 
-    // Recupera o nome de usu√°rio do localStorage
-    useEffect(() => {
-        const storedUsername = localStorage.getItem("username");
-        if (storedUsername) {
-            setUsername(storedUsername);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setLicencaSelect((prev) => ({ ...prev, [name]: value }));
+    };
+
+    // Carrega licenÁas
+    const loadLicencas = async () => {
+        setLoading(true);
+        try {
+            const response = await api.get(GET_URL);
+            setLicencas(response.data);
+        } catch (error) {
+            console.error("Erro ao carregar licenÁas:", error);
+            setErro("Erro ao carregar licenÁas.");
+        } finally {
+            setLoading(false);
         }
-    }, []);
+    };
 
-    // Busca de licen√ßas via API
-    useEffect(() => {
-        async function fetchLicencas() {
-            setLoading(true);
-            setErro("");
-
-            try {
-                // Rota de busca pode ser ajustada para sua API
-                const { data } = await api.get("api/v1/licenca/GetAllWithDetails");
-                setLicencas(data);
-            } catch (err) {
-                console.error("Erro ao carregar licen√ßas", err);
-                setErro("N√£o foi poss√≠vel carregar as licen√ßas. Tente novamente mais tarde.");
-                //setLicencas([]); // Define como array vazio em caso de erro
-            } finally {
-                // Qualquer a√ß√£o final, se necess√°rio
-                setLoading(false);
+    // Salva ou atualiza licenÁa
+    const salvarLicenca = async () => {
+        try {
+            const clienteIdNum = parseInt(licencaSelect.idCliente, 10);
+            if (isNaN(clienteIdNum) || clienteIdNum <= 0) {
+                alert("Informe um ClienteId v·lido.");
+                return;
             }
+
+            const now = new Date().toISOString();
+
+            const payload = {
+                idCliente: clienteIdNum,
+                nomeCliente: licencaSelect.nomeCliente || "Cliente Desconhecido",
+                tipoLic: licencaSelect.tipoLic || "Padr„o",
+                macAddress: licencaSelect.macAddress,
+                dataLic: now,
+                scade: licencaSelect.scade ? new Date(licencaSelect.scade).toISOString() : now,
+                attivo: true,
+                idRevenda: licencaSelect.idRevenda ? parseInt(licencaSelect.idRevenda, 10) : 1,
+                sistemaOp: licencaSelect.sistemaOp || "Windows",
+                dataAtivacao: now,
+                tipoPc: licencaSelect.tipoPc || "Desktop",
+                nomeComputador: licencaSelect.nomeComputador || "PC-GenÈrico",
+                software: licencaSelect.software,
+                ip: licencaSelect.ip,
+                processador: licencaSelect.processador || "Intel i5",
+                status: licencaSelect.status || "Ativa",
+                idLicencaChave: licencaSelect.idLicencaChave ? parseInt(licencaSelect.idLicencaChave, 10) : 0,
+                chaveLicenca: licencaSelect.chaveLicenca || "ABC123-XYZ"
+            };
+
+            console.log("Payload enviado:", payload);
+            const response = await api.post("/CreateNewLin", payload);
+            setLicencas((prev) => [...prev, response.data]);
+            openCloseModal();
+        } catch (error) {
+            console.error("Erro ao salvar licenÁa:", error.response?.data || error.message);
+            setErro("Erro ao salvar licenÁa.");
         }
-        fetchLicencas();
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        salvarLicenca();
+    };
+
+    // Exclui licenÁa
+    const handleDelete = async (id) => {
+        if (!window.confirm("Confirmar exclus„o?")) return;
+        try {
+            await api.delete(`/api/v1/licenca/${id}`);
+            setLicencas((prev) => prev.filter((l) => l.id !== id));
+        } catch (err) {
+            console.error("Erro ao excluir:", err);
+            alert("Erro ao excluir licenÁa.");
+        }
+    };
+
+    useEffect(() => {
+        loadLicencas();
     }, []);
 
-    // Filtragem das licen√ßas
     const licencasFiltradas = licencas.filter((l) =>
-        [l.cliente, l.mac, l.ip].some((campo) =>
-            campo?.toLowerCase().includes(filtro.toLowerCase())
-        )
+        [l.nomeCliente, l.macAddress, l.ip].some((c) => c?.toLowerCase().includes(filtro.toLowerCase()))
     );
 
-    // Atualiza o gr√°fico quando as licen√ßas mudam
-    useEffect(() => {
-        if (!loading && licencas.length > 0) {
-            const softwareCount = licencas.reduce((acc, l) => {
-                acc[l.software] = (acc[l.software] || 0) + 1;
-                return acc;
-            }, {});
-
-            const labels = Object.keys(softwareCount);
-            const valores = Object.values(softwareCount);
-
-            if (chartInstance.current) {
-                chartInstance.current.destroy(); // Evita duplicar o gr√°fico
-            }
-
-            chartInstance.current = new Chart(chartRef.current, {
-                type: "bar",
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: "Licen√ßas por Software",
-                            data: valores,
-                            backgroundColor: "rgba(75, 192, 192, 0.5)",
-                            borderColor: "rgba(75, 192, 192, 1)",
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: true },
-                        title: { display: true, text: "Distribui√ß√£o de Licen√ßas" }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-    }, [licencas, loading]);
-
-    /* Renderiza√ß√£o do componente */
     return (
         <div className="container">
-            {/* Sidebar */}
             <aside className="sidebar">
                 <div className="logo">
-                    {/* Imagem */}
-                    <img src="../img/Aplipack_Software.png" alt="Logo Aplipack" width="100%" />
+                    <img src="../img/Aplipack_Software.png" alt="Logo" />
                 </div>
                 <nav>
                     <ul>
-                        <li>
-                            {/* Use o Link para navega√ß√£o interna */}
-                            <Link to="/dashboard" className="active">
-                                Home
-                            </Link>
-                        </li>
-                        <li>
-                            {/* Use o Link para navega√ß√£o interna */}
-                            <Link to="/nova-licenca">Nova Licen√ßa</Link>
-                        </li>
+                        <li><Link to="/dashboard" className="active">Home</Link></li>
+                        <li><Link to="/anagrafica">Anagr·fica</Link></li>
+                        <li><button onClick={openCloseModal} className="btn-link">Nova LicenÁa</button></li>
                     </ul>
                 </nav>
             </aside>
 
-            {/* Conte√∫do Principal */}
             <div className="main">
-                {/* Topbar */}
                 <header className="topbar">
-                    <div className="title">Sistema de Licen√ßas - Aplipack Software</div>
+                    <h1>Sistema de LicenÁas - Aplipack</h1>
                     <div className="user-info">
                         <span>{username}</span> | <Link to="/login">Logout</Link>
-                        <div className="timezone">All times are UTC-03:00</div>
                     </div>
                 </header>
 
-                {/* Conte√∫do */}
-                <main>
-                    <section className="card-section">
-                        <div className="card">
-                            <div className="card-header">
-                                <input
-                                    type="text"
-                                    placeholder="üîç Buscar por cliente, MAC ou IP..."
-                                    className="search-input" // Adicionada classe CSS
-                                    value={filtro}
-                                    onChange={(e) => setFiltro(e.target.value)}
-                                />
-                            </div>
-                            <div className="card-subheader">
-                                Filtrando por: <strong>{filtro || "Todos"}</strong>
-                                <strong>Total de Licen√ßas Ativas: { } <span>{licencasFiltradas.length}</span></strong>
-                            
-                            </div>
+                <FilterBar filtro={filtro} setFiltro={setFiltro} openCloseModal={openCloseModal} />
 
-                            {loading && <p>Carregando licen√ßas...</p>}
-                            {erro && <p style={{ color: "red" }}>{erro}</p>}
+                {loading ? (
+                    <p>Carregando...</p>
+                ) : erro ? (
+                    <p className="error">{erro}</p>
+                ) : (
+                    <LicenseTable licencas={licencasFiltradas} onEdit={salvarLicenca} onDelete={handleDelete} />
+                )}
 
-                            {!loading && !erro && ( 
-                            <table className="session-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Cliente</th>
-                                        <th>MAC</th>
-                                        <th>Software</th>
-                                        <th>IP</th>
-                                        <th>Data de Ativa√ß√£o</th>
-                                        <th>Validade</th>
-                                        <th>Status</th>
-                                        <th>A√ß√µes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {licencasFiltradas.map((l) => (
-                                        <tr key={l.id}>
-                                            <td>{l.numLic}</td>
-                                            <td>{l.nomeCliente}</td>
-                                            <td>{l.macAddress}</td>
-                                            <td>{l.software}</td>
-                                            <td>{l.ip}</td>
-                                            <td>{l.dataAtivacao}</td>
-                                            <td>{l.validade}</td>
-                                            <td>{l.status}</td>
-                                            <td>
-                                                <button>Editar</button>
-                                                <button>Excluir</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                        {licencasFiltradas.length === 0 && (
-                                            <tr>
-                                                <td colSpan="9" style={{ textAlign: "center" }}>
-                                                    Nenhuma licen√ßa encontrada
-                                                </td>
-                                            </tr>
-                                        )}
-                                </tbody>
-                              </table>
-                            )}
+                {addModal && (
+                    <div className="modal-overlay">
+                        <div className="modal">
+                            <h2 className="modal-title">Nova LicenÁa</h2>
+                            <form id="formLicenca" onSubmit={handleSubmit}>
+
+                                <div className="form-grid">
+                                {/* Campos obrigatÛrios */}
+                                <div className="form-group">
+                                    <label>ID Cliente</label>
+                                    <input name="idCliente" type="number" onChange={handleChange} className="form-control" required />
+                                </div>                                
+
+                                <div className="form-group">
+                                    <label>Nome Cliente</label>
+                                    <input name="nomeCliente" onChange={handleChange} className="form-control" required />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>MAC Address</label>
+                                    <input name="macAddress" onChange={handleChange} className="form-control" required />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Software</label>
+                                    <input name="software" onChange={handleChange} className="form-control" required />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>IP</label>
+                                    <input name="ip" onChange={handleChange} className="form-control" required />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Validade</label>
+                                    <input type="date" name="scade" onChange={handleChange} className="form-control" required />
+                                </div>
+
+                                {/* Campos opcionais com valor padr„o */}
+                                <div className="form-group">
+                                    <label>Tipo LicenÁa</label>
+                                    <input name="tipoLic" onChange={handleChange} className="form-control" placeholder="Padr„o" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Sistema Operacional</label>
+                                    <input name="sistemaOp" onChange={handleChange} className="form-control" placeholder="Windows" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Tipo PC</label>
+                                    <input name="tipoPc" onChange={handleChange} className="form-control" placeholder="Desktop" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Nome Computador</label>
+                                    <input name="nomeComputador" onChange={handleChange} className="form-control" placeholder="PC-GenÈrico" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Processador</label>
+                                    <input name="processador" onChange={handleChange} className="form-control" placeholder="Intel i5" />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Chave LicenÁa</label>
+                                    <input name="chaveLicenca" onChange={handleChange} className="form-control" placeholder="ABC123-XYZ" />
+                                </div>
+                                </div>
+
+                                {/* Botıes */}
+                                <div className="modal-actions">
+                                    <button type="button" onClick={openCloseModal} className="btn btn-secondary">Cancelar</button>
+                                    <button type="submit" className="btn btn-primary">Salvar</button>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                )}
 
-                        <div className="card-h2">
-                            <canvas ref={chartRef} id="graficoSoftware" width="600" height="280"></canvas>
-                        </div>
-                    </section>
-                </main>
             </div>
         </div>
     );

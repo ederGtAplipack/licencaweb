@@ -1,0 +1,420 @@
+/* ===========================
+   LicencaWeb - global.css
+   Refatorado: variáveis, acessibilidade, responsividade
+   =========================== */
+
+/* Theme tokens */
+:root {
+    --bg: #f0f2f5;
+    --card-bg: #ffffff;
+    --text: #212529;
+    --muted: #6c757d;
+    --primary: #007bff;
+    --primary-dark: #0056b3;
+    --danger: #dc3545;
+    --border: #dfe3e8;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 3px 8px rgba(16,24,40,0.06);
+    --transition-fast: 150ms ease;
+    --max-width-form: 420px;
+}
+
+/* Global reset / base */
+* {
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.4;
+}
+
+/* Utility */
+.sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===========================
+   LOGIN
+   =========================== */
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg);
+}
+
+.login-box {
+    width: 100%;
+    max-width: var(--max-width-form);
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.login-title {
+    margin: 0 0 .25rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.login-subtitle {
+    margin: 0 0 1.25rem 0;
+    font-size: .95rem;
+    color: var(--muted);
+}
+
+/* Form layout */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    align-items: stretch;
+}
+
+.login-input-group {
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.login-label {
+    display: block;
+    margin-bottom: .35rem;
+    font-size: .9rem;
+    color: var(--text);
+}
+
+/* Inputs */
+.login-input,
+.form-control {
+    width: 100%;
+    padding: .6rem .75rem;
+    font-size: 1rem;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+    .login-input:focus,
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(0,123,255,0.08);
+    }
+
+/* Remember / forgot */
+.login-remember-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .5rem;
+}
+
+.login-remember-label {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .9rem;
+    color: var(--text);
+}
+
+.login-forgot-link {
+    font-size: .9rem;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+    .login-forgot-link:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+/* Buttons */
+.login-button,
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .6rem .9rem;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+    .login-button:focus,
+    .btn:focus {
+        outline: 3px solid rgba(0,123,255,0.12);
+    }
+
+.login-button {
+    color: #fff;
+    background: var(--primary);
+}
+
+    .login-button:hover:not(:disabled) {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+    .login-button:disabled {
+        background: #adb5bd;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+/* Errors / messages */
+.login-error {
+    margin-bottom: .75rem;
+    padding: .65rem .75rem;
+    color: #721c24;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: var(--radius-sm);
+    font-size: .9rem;
+}
+
+/* Signup link */
+.login-signup-link {
+    margin-top: .75rem;
+    font-size: .9rem;
+    color: var(--muted);
+}
+
+.login-signup-anchor {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+    .login-signup-anchor:hover {
+        color: var(--primary-dark);
+    }
+
+/* ===========================
+   FILTER / ACTIONS
+   =========================== */
+.card-header-filtro {
+    display: flex;
+    gap: .75rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    padding: .5rem .6rem;
+    border: 1px solid var(--border);
+    border-radius: .5rem;
+    max-width: 420px;
+    width: 100%;
+    background: #fff;
+}
+
+/* Buttons (variants) */
+.btn {
+    padding: .5rem .75rem;
+    font-weight: 600;
+    border-radius: .5rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+    .btn-primary:hover:not(:disabled) {
+        background: var(--primary-dark);
+    }
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* Small helpers */
+.flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* ===========================
+   TABLE
+   =========================== */
+.session-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+    .session-table thead th {
+        text-align: left;
+        font-weight: 600;
+        padding: .75rem;
+        background: #f7f9fb;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .session-table tbody td {
+        padding: .65rem .75rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        vertical-align: middle;
+    }
+
+    /* zebra stripes for readability */
+    .session-table tbody tr:nth-child(odd) {
+        background: rgba(0,0,0,0.02);
+    }
+
+    .session-table tbody tr:hover {
+        background: rgba(0,0,0,0.04);
+    }
+
+/* responsive table: allow horizontal scroll on small screens */
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* ===========================
+   MODAL
+   =========================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 1200;
+}
+
+.modal {
+    width: 100%;
+    max-width: 560px;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+    /* modal title and layout */
+    .modal h2, .modal .modal-title {
+        margin: 0 0 .5rem 0;
+        font-size: 1.125rem;
+    }
+
+.form-group {
+    margin-bottom: .75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.form-control {
+    padding: .6rem .75rem;
+    border-radius: .5rem;
+    border: 1px solid var(--border);
+    background: #fff;
+}
+
+/* modal actions align right */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    margin-top: .5rem;
+}
+
+/* ===========================
+   Responsive tweaks
+   =========================== */
+@media (max-width: 600px) {
+    .login-box {
+        padding: 1.25rem;
+        width: 100%;
+    }
+
+    .card-header-filtro {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .5rem;
+    }
+
+    .session-table thead th, .session-table tbody td {
+        padding: .5rem;
+        font-size: .95rem;
+    }
+
+    .modal {
+        padding: .75rem;
+    }
+}
+
+/* small visual helpers (optional) */
+.text-muted {
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+.center {
+    text-align: center;
+}
