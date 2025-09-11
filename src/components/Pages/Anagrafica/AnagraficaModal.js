@@ -68,12 +68,12 @@ export default function AnagraficaModal({ onClose, onSaved }) {
         }
     };
 
-    // Renderiza o formul·rio do modal
+    // Renderiza o formul√°rio do modal
     return (
         <div className="modal-overlay">
             <div className="modal-ana">
                 <div className="container-ana">
-                    <h2 className="form-title">Cadastro de Anagrafica</h2>
+                    <h2 className="form-title">Cadastro de Cliente</h2>
                      <form onSubmit={handleSubmit} className="formAnagrafica">
                         <div className="form-grid">
                             <div className="form-group-ana form-group-half">
@@ -87,7 +87,7 @@ export default function AnagraficaModal({ onClose, onSaved }) {
 
                             {/* segunda linha*/}
                             <div className="form-group-ana form-group-half">
-                                <label>Raz„o Social</label>
+                                <label>Raz√£o Social</label>
                                 <input name="razaoSocial" value={form.razaoSocial} onChange={handleChange} required className="form-control" />
                             </div>
 
@@ -107,7 +107,7 @@ export default function AnagraficaModal({ onClose, onSaved }) {
                             </div>
 
                             <div className="form-group-ana form-group-full">
-                                <label>EndereÁo</label>
+                                <label>Endere√ßo</label>
                                 <input name="endereco" value={form.endereco} onChange={handleChange} className="form-control" />
                             </div>
 
@@ -163,7 +163,7 @@ export default function AnagraficaModal({ onClose, onSaved }) {
                     </form>
                 </div>
             </div>
-            {/* Modal secund·rio para mensagens */}
+            {/* Modal secund√°rio para mensagens */}
             {mensagem && (
                 <div className="modal-overlay">
                     <div className="modal-message">

@@ -1,5 +1,6 @@
-﻿// src/components/Licencas/LicenseTable.jsx
+// src/components/Licencas/LicenseTable.jsx
 import React from "react";
+import "./form.css";
 
 export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
     const linhas = Array.isArray(licencas) ? licencas : [];
@@ -32,8 +33,8 @@ export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
                             <td>{l.scade ?? "—"}</td>
                             <td>{l.status}</td>
                             <td>
-                                <button className="btn btn-secondary" onClick={() => onEdit(l)}>Editar</button>{" "}
-                                <button className="btn btn-danger" onClick={() => onDelete(l.id)}>Excluir</button>
+                                <button className="btn btn-secondary-licen" onClick={() => onEdit(l)}>Editar</button>{" "}
+                                <button className="btn btn-danger-licen" onClick={() => onDelete(l.id)}>Excluir</button>
                             </td>
                         </tr>
                     ))

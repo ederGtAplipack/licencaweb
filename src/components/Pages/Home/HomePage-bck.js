@@ -1,8 +1,6 @@
 // src/components/Pages/Home/HomePage.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ReactECharts from "echarts-for-react";
-import 'echarts-gl'; 
 import {
     BarChart,
     Bar,
@@ -15,7 +13,6 @@ import {
     Cell,
     Legend,
     ResponsiveContainer,
-    LabelList,
 } from "recharts";
 
 export default function HomePage() {
@@ -58,54 +55,13 @@ export default function HomePage() {
 
     const COLORS = ["#4f46e5", "#16a34a", "#f59e0b", "#ef4444", "#0ea5e9"];
 
-    // Separe as categorias e os valores para o ECharts
-    const categories = statusData.map(d => d.status);
-    const values = statusData.map(d => d.total);
-
-    // ... (demais códigos)
-
-    // Configuração do gráfico 3D
-    const status3DOptions = {
-        tooltip: {},
-        xAxis3D: {
-            type: 'category',
-            data: categories,
-            name: 'Status',
-        },
-        yAxis3D: {
-            type: 'value',
-            name: 'Total',
-        },
-        zAxis3D: {
-            type: 'value',
-            name: 'Valor',
-            max: Math.max(...values) * 1.2
-        },
-        grid3D: {
-            boxWidth: 300,
-            boxDepth: 120,
-            // Estilize a aparência da grade 3D
-        },
-        series: [{
-            type: 'bar3D',
-            data: statusData.map(d => [d.status, d.total, d.total]),
-            shading: 'lambert', // Sombreamento para efeito 3D
-            label: {
-                show: true,
-                formatter: '{c}', // Mostra o valor no topo da barra
-                position: 'top',
-            },
-        }],
-    };
-
-
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-            {/* Licenças por Status */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+            {/* Licen�as por Status */}
             <div className="rounded-2xl border bg-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-transform duration-300">
                 <div className="p-4 border-b">
                     <h3 className="text-lg font-semibold text-gray-800">
-                        Licenças por Status
+                        Licen�as por Status
                     </h3>
                 </div>
                 <div className="p-4">
@@ -119,12 +75,12 @@ export default function HomePage() {
                                 dataKey="total"
                                 fill="url(#statusGradient)"
                                 radius={[8, 8, 0, 0]}
-                                animationDuration={2100}
+                                animationDuration={1200}
                             />
                             <defs>
                                 <linearGradient id="statusGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#b1b8f2" stopOpacity={0.9} />
-                                    <stop offset="95%" stopColor="#2039a6" stopOpacity={0.7} />
+                                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.9} />
+                                    <stop offset="95%" stopColor="#818cf8" stopOpacity={0.7} />
                                 </linearGradient>
                             </defs>
                         </BarChart>
@@ -132,11 +88,11 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* Licenças por Cliente */}
+            {/* Licen�as por Cliente */}
             <div className="rounded-2xl border bg-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-transform duration-300">
                 <div className="p-4 border-b">
                     <h3 className="text-lg font-semibold text-gray-800">
-                        Licenças por Cliente
+                        Licen�as por Cliente
                     </h3>
                 </div>
                 <div className="p-4">
@@ -172,11 +128,11 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* Licenças por Software */}
+            {/* Licen�as por Software */}
             <div className="rounded-2xl border bg-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-transform duration-300">
                 <div className="p-4 border-b">
                     <h3 className="text-lg font-semibold text-gray-800">
-                        Licenças por Software
+                        Licen�as por Software
                     </h3>
                 </div>
                 <div className="p-4">
@@ -194,25 +150,12 @@ export default function HomePage() {
                             />
                             <defs>
                                 <linearGradient id="softwareGradient" x1="0" y1="0" x2="1" y2="0">
-                                    <stop offset="5%" stopColor="#b1b8f2" stopOpacity={0.9} />
-                                    <stop offset="95%" stopColor="#2039a6" stopOpacity={0.7} />
+                                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.9} />
+                                    <stop offset="95%" stopColor="#86efac" stopOpacity={0.7} />
                                 </linearGradient>
                             </defs>
                         </BarChart>
                     </ResponsiveContainer>
-                </div>
-            </div>
-
-            {/* Espaço reservado para futuros gráficos */}
-            {/* Gráfico 3D com ECharts */}
-            <div className="rounded-2xl border bg-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-transform duration-300">
-                <div className="p-4 border-b">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                        Licenças por Status (3D)
-                    </h3>
-                </div>
-                <div className="p-4">
-                    <ReactECharts option={status3DOptions} style={{ height: 300 }} />
                 </div>
             </div>
         </div>

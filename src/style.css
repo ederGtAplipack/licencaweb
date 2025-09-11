@@ -2,7 +2,7 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f2f5;
   color: #333;
 }
@@ -38,7 +38,7 @@ header {
 /* Sidebar */
 .sidebar {
     width: 220px;
-    background-color: #1976d2;
+    background-color: rgb(46 80 129);
     color: #ecf0f1;
     display: flex;
     flex-direction: column;
@@ -82,7 +82,7 @@ header {
 
 /* Topbar */
 .topbar {
-    background-color: #1976d2;
+    background-color: rgb(46 80 129);
     color: #fff;
     padding: 12px 24px;
     display: flex;
@@ -122,9 +122,10 @@ header {
 }
 /* Cartões */
 .card {
+  margin-top: 5px;
   background-color: #ffffff;
   border-radius: 10px;
-  padding: 20px;
+  padding: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: -webkit-fill-available;
 }
@@ -157,14 +158,22 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 10px;
+  margin-bottom: 1px;
+}
+
+.card-header-filtro-usuario {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    align-content: space-around;
+    margin-bottom: 1px;
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1px;
 }
 
 .card-newlic {
@@ -205,11 +214,11 @@ th, td {
 }
 
 th {
-  background-color: #1976d2;
-  color: white;
-  font-weight: 500;
-  text-transform: uppercase;
-  font-size: 0.9rem;
+    background-color: #44579c;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
 tr:nth-child(even) {
@@ -541,7 +550,7 @@ input.readonly {
 }
 
 .btn-primary {
-    background: #007bff;
+    background: rgb(46,80,129);
     color: #fff;
 }
 
@@ -560,7 +569,7 @@ input.readonly {
     }
 
 .btn-danger{
-    background: #dc3545;
+    background: #ba6e66;
     color: #fff;
     margin-right: 10px;
 }

@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\components\\Licencas",
-    "\\src\\components\\Login",
     "\\src\\components\\Pages",
-    "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Home",
+    "\\src\\components\\Pages\\Usuario",
     "\\src\\Layouts",
     "\\src\\services"
   ],
-  "SelectedNode": "\\src\\components\\Pages\\Anagrafica\\FilterBar.js",
+  "SelectedNode": "\\src\\style.css",
   "PreviewInSolutionExplorer": false
 }

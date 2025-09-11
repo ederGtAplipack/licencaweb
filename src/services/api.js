@@ -9,6 +9,19 @@ import axios from 'axios';
         },
     
     });
+    api.interceptors.request.use(
+        (config) => {
+            // Adicione o token de autenticação ao cabeçalho, se disponível
+            const token = localStorage.getItem('token'); // Ou de onde você armazena o token
+            if (token) {
+                config.headers['Authorization'] = `Bearer ${token}`;
+            }
+            return config;
+        },
+        (error) => {
+            return Promise.reject(error);
+        }
+    );
 
 
 export default api;

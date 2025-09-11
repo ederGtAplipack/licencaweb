@@ -13,12 +13,7 @@ export default function AnagraficaPage() {
     const [loading, setLoading] = useState(false);
     const [mensagem, setMensagem] = useState("");
     const [error, setError] = useState("");
-    const [filtro, setFiltro] = useState("");
-    
-
-    const licencasFiltradas = anagraficas.filter((l) =>
-        [l.nomeCliente, l.macAddress, l.ip].some((c) => c?.toLowerCase().includes(filtro.toLowerCase()))
-    );
+    const [filtro, setFiltro] = useState("");   
 
 
     const loadData = async () => {
@@ -40,21 +35,23 @@ export default function AnagraficaPage() {
     useEffect(() => {
         loadData();
     }, []);
+       
+
+    const anagraficaFiltradas = anagraficas.filter((a) =>
+        [a.razaoSocial, a.nomeFantasia, a.cnpj, a.cidade, a.contato, a.email].some((c) => c?.toLowerCase().includes(filtro.toLowerCase()))
+    );
 
     return (
         <div className="continer" >
             <div>
-                <FilterBar filtro={filtro} setFiltro={setFiltro} />
+                <FilterBar filtro={filtro} setFiltro={setFiltro} total={anagraficaFiltradas.length} />
             </div>
-            <button className="btn btn-primary mb-3" onClick={() => setShowModal(true)}>
-                Adicionar Anagrafica
-            </button>
             {loading ? (
                 <p>Carregando...</p>
             ) : error ? (
                 <p className="error">{error}</p>
-            ) : (
-                <AnagraficaTable anagraficas={anagraficas} />
+                ) : (
+                    <AnagraficaTable anagraficas={anagraficaFiltradas} />
             )}
 
             {showModal && (

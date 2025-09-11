@@ -2,6 +2,8 @@
 import React from "react";
 
 export default function FilterBar({ filtro, setFiltro, total, openCloseModal }) {
+    const [showModal, setShowModal] = React.useState(false); // Local state for modal visibility]
+
     return (
         <div className="card">
             <div className="card-header">

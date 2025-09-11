@@ -5,6 +5,7 @@ import DashboardLayout from "./Layouts/DashboardLayout";
 import HomePage from "./components/Pages/Home/HomePage";
 import LicencasPage from "./components/Licencas/LicencasPage";
 import AnagraficaPage from "./components/Pages/Anagrafica/AnagraficaPage";
+import UsuarioPage from "./components/Pages/Usuario/UsuarioPage";
 
 /*
   Componente de rotas da aplicação.
@@ -23,6 +24,7 @@ export default function Routers() {
                     <Route path="home" element={<HomePage />} />
                     <Route path="licencas" element={<LicencasPage />} />
                     <Route path="anagrafica" element={<AnagraficaPage />} />
+                    <Route path="usuario" element={<UsuarioPage />} />
                 </Route>
             </Routes>
         </Router>

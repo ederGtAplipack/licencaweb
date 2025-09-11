@@ -1,4 +1,4 @@
-/* Estilos gerais CLIENTES */
+/* Estilos gerais LICENCAS */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -107,11 +107,10 @@
     transition: background 0.3s;
 }
 
-
-.btn-primary-cliente {
+.btn-primary {
     padding: 12px 24px;
-    background-color: #FFF;
-    color: #235081;
+    background-color: #3498db;
+    color: #fff;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -131,7 +130,7 @@
     }
 
 
-.btn-secondary {
+.btn-secondary-licen {
     background: #6c757d;
     color: #fff;
     margin-right: 10px;
@@ -139,6 +138,16 @@
 
     .btn-secondary:hover {
         background: #5a6268;
+    }
+
+.btn-danger-licen {
+    background: #ba6e66;
+    color: #fff;
+    margin-right: 10px;
+}
+
+    .btn-danger:hover {
+        background: #c82333;
     }
 
 /* Mensagem de sucesso/erro */
