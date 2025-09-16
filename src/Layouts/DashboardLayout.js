@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaUser} from 'react-icons/fa'; // Exemplo com 'react-icons'
 import "../style.css";
 
 export default function DashboardLayout() {
@@ -70,11 +71,12 @@ export default function DashboardLayout() {
                     </div>
 
                     <div className="user-info">
+                        <ul>
                         <li>
-                            <Link to="/dashboard/usuario">Usuários</Link>
+                            <Link to="/dashboard/usuario">Usuário</Link>
                         </li>
-                        <div className="icon">
-                            <img src="../img/profile_80px.png" alt="Profile" />
+                        </ul>
+                        <div className="icon"> <FaUser />
                         </div>
                         <span>{username}</span> | <Link to="/login">Logout</Link>
                     </div>

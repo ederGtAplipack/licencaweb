@@ -141,6 +141,28 @@
         background: #5a6268;
     }
 
+.btn-secondary-cli {
+    background: #6c757d;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-danger-cli {
+    background: #ba6e66;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+
+
 /* Mensagem de sucesso/erro */
 .info {
     margin-top: 20px;

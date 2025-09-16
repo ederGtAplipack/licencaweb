@@ -1,46 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../../../services/api";
 import "./form.css";
 
 //modal com sucesso ou erro 
-const SuccessModal = ({ message, onClose }) => {
+const MessageModal = ({ type, message, onClear }) => {
     return (
         <div className="modal-overlay">
-        <div className="modal-content-success">
+            <div className={`message-content ${type}`}>
                 <p>{message}</p>
-                <button onClick={onClose} className="btn-close-success">Fechar</button>
+                <button onClick={onClear} className="btn-close-success">
+                    Ok !
+                </button>
             </div>
-    </div>
+        </div>
     );
 };  
 
-export default function AnagraficaModal({ onClose, onSaved }) {
-    const [form, setForm] = useState({
-        idAnagrafica: "",
-        razaoSocial: "",
-        nomeFantasia: "",
-        contato: "",
-        cep: "",
-        endereco: "",
-        bairro: "",
-        cidade: "",
-        uf: "",
-        cnpj: "",
-        ie: "",
-        telefone: "",
-        email: "",
-        idRevenda: "",
-        senha: ""
-    });
+// Objeto de estado inicial para um novo cliente
+const initialState = {
+    idAnagrafica: "",
+    razaoSocial: "",
+    nomeFantasia: "",
+    contato: "",
+    cep: "",
+    endereco: "",
+    bairro: "",
+    cidade: "",
+    uf: "",
+    cnpj: "",
+    ie: "",
+    telefone: "",
+    email: "",
+    idRevenda: "",
+    senha: ""
+};
+
+export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
+    // Usamos 'anagraficaData' para preencher o formulário ou 'initialState' para um novo
+    const [form, setForm] = useState(anagraficaData || initialState);
 
     const [loading, setLoading] = useState(false);
     const [mensagem, setMensagem] = useState(null);
+
+    // Efeito para sincronizar o estado do formulário com a prop anagraficaData
+    // Isso garante que o formulário seja preenchido corretamente para edições
+    useEffect(() => {
+        setForm(anagraficaData || initialState);
+    }, [anagraficaData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    /*SOMENETE PARA CADASTRO */
+    /*
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -53,27 +67,69 @@ export default function AnagraficaModal({ onClose, onSaved }) {
             };
 
             await api.post("/api/v1/Anagrafica/CreateAnagrafica", payload);
-            setMensagem({ type: "sucess", text: "Registro salvo com sucesso!" });
-            onSaved(); // recarrega tabela
-            //setShowSuccessModal(true);
-
-            setTimeout(() => {
-                onClose(); // fecha modal
-            }, 5000);
+            setMensagem({
+                type: "success",
+                text: "Registro salvo com sucesso!"
+            });
+            
         } catch (err) {
             console.error("Erro ao salvar:", err.response?.data || err.message);
             alert("Erro ao salvar registro.");
+            setMensagem({
+                type: "error",
+                text: "Erro ao salvar Registro."
+            });
+        } finally {
+            setLoading(false);
+        }
+    };*/
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setMensagem(null);
+        try {
+            if (form.idAnagrafica) {
+                // Modo de Edição - Envia para o endpoint de atualização
+                await api.put(`/api/v1/Anagrafica/UpdateAnagrafica/${form.idAnagrafica}`, form);
+                setMensagem({ type: "success", text: "Registro atualizado com sucesso!" });
+                //onClose();
+            } else {
+                // Modo de Criação - Envia para o endpoint de criação
+                const { idAnagrafica, ...payload } = form;
+                await api.post("/api/v1/Anagrafica/CreateAnagrafica", payload);
+                setMensagem({ type: "success", text: "Registro salvo com sucesso!" });
+                onClose();
+            }
+        } catch (err) {
+            console.error("Erro ao salvar:", err.response?.data || err.message);
+            setMensagem({ type: "error", text: "Erro ao salvar o registro." });
         } finally {
             setLoading(false);
         }
     };
+
+    // Auto-fechar mensagem de sucesso em 5s e depois fechar o modal principal
+    useEffect(() => {
+        if (mensagem?.type === "success") {
+            const timer = setTimeout(() => {
+                setMensagem(null);
+                if (onSaved) {
+                    onSaved();
+                }
+                onClose(); // fecha o modal principal depois de 5s
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [mensagem, onClose, onSaved]);
 
     // Renderiza o formulário do modal
     return (
         <div className="modal-overlay">
             <div className="modal-ana">
                 <div className="container-ana">
-                    <h2 className="form-title">Cadastro de Cliente</h2>
+                    <h2 className="form-title">{form.idAnagrafica ? "Editar Cliente" : "Novo Cliente"}</h2>
                      <form onSubmit={handleSubmit} className="formAnagrafica">
                         <div className="form-grid">
                             <div className="form-group-ana form-group-half">
@@ -165,20 +221,11 @@ export default function AnagraficaModal({ onClose, onSaved }) {
             </div>
             {/* Modal secundário para mensagens */}
             {mensagem && (
-                <div className="modal-overlay">
-                    <div className="modal-message">
-                        <p>{mensagem.text}</p>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => {
-                                setMensagem(null);
-                                if (mensagem.type === "success") onClose();
-                            }}
-                        >
-                            Salvo com sucesso !
-                        </button>
-                    </div>
-                </div>
+                <MessageModal
+                    type={mensagem.type}
+                    message={mensagem.text}
+                    onClear={() => setMensagem(null)}
+                />
             )}
         </div>
     );

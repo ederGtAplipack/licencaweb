@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\components\\Licencas",
     "\\src\\components\\Pages",
+    "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Home",
     "\\src\\components\\Pages\\Usuario",
     "\\src\\Layouts",
     "\\src\\services"
   ],
-  "SelectedNode": "\\src\\style.css",
+  "SelectedNode": "\\src\\components\\Pages\\Anagrafica\\AnagraficaModal.js",
   "PreviewInSolutionExplorer": false
 }

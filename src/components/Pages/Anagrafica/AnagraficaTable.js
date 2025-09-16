@@ -1,8 +1,9 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
+import { FaEdit, FaTrash } from 'react-icons/fa'; // Exemplo com 'react-icons'
 
-export default function AnagraficaTable({ anagraficas = [] }) {
+export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) {
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const registrosPorPagina = 10;
+    const registrosPorPagina = 12;
 
     // calcular índices
     const indexUltimo = paginaAtual * registrosPorPagina;
@@ -24,7 +25,8 @@ export default function AnagraficaTable({ anagraficas = [] }) {
                         <th>UF</th>
                         <th>CNPJ</th>
                         <th>Telefone</th>
-                        <th>Email</th>
+                        {/*<th>Email</th>*/}
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +41,15 @@ export default function AnagraficaTable({ anagraficas = [] }) {
                                 <td>{a.uf}</td>
                                 <td>{a.cnpj}</td>
                                 <td>{a.telefone}</td>
-                                <td>{a.email}</td>
+                                {/*<td>{a.email}</td>*/}
+                                <td>
+                                    <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
+                                        <FaEdit />                                         
+                                    </button>
+                                    <button className="btn btn-danger-cli" onClick={() => onDelete(a.idAnagrafica)}>
+                                        <FaTrash />
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     ) : (

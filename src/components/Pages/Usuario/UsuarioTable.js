@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function TemplateTable({ usuarios = [] }) {
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const registrosPorPagina = 10;
+    const registrosPorPagina = 13;
 
     const indexUltimo = paginaAtual * registrosPorPagina;
     const indexPrimeiro = indexUltimo - registrosPorPagina;
@@ -10,6 +10,7 @@ export default function TemplateTable({ usuarios = [] }) {
 
     const totalPaginas = Math.ceil(usuarios.length / registrosPorPagina);
 
+   
     return (        
         <div>
             <table className="session-table">
@@ -62,6 +63,9 @@ export default function TemplateTable({ usuarios = [] }) {
                     </button>
                 </div>
             )}
+            <div>
+                <p> Total de registros: {usuarios.length}</p>
+            </div>
         </div>
     );
 }

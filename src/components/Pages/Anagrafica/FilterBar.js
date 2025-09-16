@@ -1,11 +1,9 @@
 // src/Pages/Anagrafica/FilterBar.jsx
-import React, { useEffect, useState } from "react";
-import AnagraficaModal from "../Anagrafica/AnagraficaModal";
-import api from "../../../services/api";
+import React from "react";
 import "./form.css";
 
-export default function FilterBar({ filtro, setFiltro, total }) {
-    const [showModal, setShowModal] = useState(false);  
+export default function FilterBar({ filtro, setFiltro, total = 0, onAdd }) {
+    /*const [showModal, setShowModal] = useState(false);  
     const [loading, setLoading] = useState(false);
     const [mensagem, setMensagem] = useState("");
     const [error, setError] = useState("");
@@ -29,7 +27,7 @@ export default function FilterBar({ filtro, setFiltro, total }) {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, []);*/
     
     return (
     <div className="card">
@@ -56,14 +54,14 @@ export default function FilterBar({ filtro, setFiltro, total }) {
                     Total: <strong>{total}</strong>
                         </span>
             </div>
-            <button className="btn btn-primary-cliente" onClick={() => setShowModal(true)}>
-               + Adicionar Cliente
-            </button>
+                    <button className="btn btn-primary-cliente" onClick={() => {
+                        if (onAdd) onAdd();
+                        }}
+                    >
+                        + Novo Cliente  
+                    </button>
          </div>
-            </div>
-            {showModal && (
-                <AnagraficaModal onClose={() => setShowModal(false)} onSaved={loadData} />
-            )}
+         </div>            
     </div>
   );
 }

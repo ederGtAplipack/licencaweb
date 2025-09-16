@@ -229,6 +229,46 @@
     border-radius: 6px;
 }
 
+/* Container de sobreposição para o modal de mensagem */
+.message-modal-overlay {
+    position: fixed; /* Ou 'absolute' se o pai 'modal-usuario' tiver position: relative; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente para destacar a mensagem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001; /* Garante que fique acima de outros elementos, como o modal principal (que geralmente tem z-index: 1000) */
+}
+
+/* Conteúdo da mensagem de feedback */
+.message-content {
+    background-color: #fff;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1002;
+    max-width: 400px;
+}
+
+    .message-content p {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+    }
+
+    .message-content.success {
+        border-left: 5px solid #28a745;
+    }
+
+    .message-content.error {
+        border-left: 5px solid #dc3545;
+    }
+
+
+
 /* Cor diferenciada para sucesso/erro */
 .toast-success {
     border-left: 6px solid #28a745;
