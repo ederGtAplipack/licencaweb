@@ -100,11 +100,11 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
                 const { idAnagrafica, ...payload } = form;
                 await api.post("/api/v1/Anagrafica/CreateAnagrafica", payload);
                 setMensagem({ type: "success", text: "Registro salvo com sucesso!" });
-                onClose();
+                //onClose();
             }
         } catch (err) {
             console.error("Erro ao salvar:", err.response?.data || err.message);
-            setMensagem({ type: "error", text: "Erro ao salvar o registro." });
+            setMensagem({ type: "error", text: "Erro ao salvar o registro !" });
         } finally {
             setLoading(false);
         }

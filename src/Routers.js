@@ -6,9 +6,10 @@ import HomePage from "./components/Pages/Home/HomePage";
 import LicencasPage from "./components/Licencas/LicencasPage";
 import AnagraficaPage from "./components/Pages/Anagrafica/AnagraficaPage";
 import UsuarioPage from "./components/Pages/Usuario/UsuarioPage";
+import RevendaPage from "./components/Pages/Revendas/RevendaPage";
 
 /*
-  Componente de rotas da aplicação.
+  Componente de rotas da aplicaÃ§Ã£o.
   Define as rotas para Login e Dashboard, incluindo redirecionamento.
 */
 export default function Routers() {
@@ -25,6 +26,7 @@ export default function Routers() {
                     <Route path="licencas" element={<LicencasPage />} />
                     <Route path="anagrafica" element={<AnagraficaPage />} />
                     <Route path="usuario" element={<UsuarioPage />} />
+                    <Route path="revendas" element={<RevendaPage />} />
                 </Route>
             </Routes>
         </Router>

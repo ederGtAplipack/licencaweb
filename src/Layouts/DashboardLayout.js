@@ -48,6 +48,9 @@ export default function DashboardLayout() {
                                 <li>
                                     <Link to="/dashboard/anagrafica">Cliente</Link>
                                 </li>
+                                <li>
+                                    <Link to="/dashboard/revendas">Revendas</Link>
+                                </li>
                             </ul>
                         </nav>
                     </motion.aside>
