@@ -7,6 +7,7 @@ import LicencasPage from "./components/Licencas/LicencasPage";
 import AnagraficaPage from "./components/Pages/Anagrafica/AnagraficaPage";
 import UsuarioPage from "./components/Pages/Usuario/UsuarioPage";
 import RevendaPage from "./components/Pages/Revendas/RevendaPage";
+import Contrato from "./components/Pages/Contratos/ContratoPage";
 
 /*
   Componente de rotas da aplicação.
@@ -27,6 +28,7 @@ export default function Routers() {
                     <Route path="anagrafica" element={<AnagraficaPage />} />
                     <Route path="usuario" element={<UsuarioPage />} />
                     <Route path="revendas" element={<RevendaPage />} />
+                    <Route path="contratos" element={<Contrato /> } />
                 </Route>
             </Routes>
         </Router>

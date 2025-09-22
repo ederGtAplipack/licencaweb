@@ -16,7 +16,7 @@ export default function LicencasPage() {
     useEffect(() => {
         axios.get("http://192.168.200.124:8080/api/v1/licencaquery/GetAllWithDetails")
             .then((resp) => setLicencas(resp.data))
-            .catch((err) => console.error("Erro ao carregar licenÁas:", err));
+            .catch((err) => console.error("Erro ao carregar licen√ßas:", err));
     }, []);
 
     return (

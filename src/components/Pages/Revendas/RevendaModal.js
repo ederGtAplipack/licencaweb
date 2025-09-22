@@ -95,7 +95,7 @@ export default function RevendaModal({ onClose, onSaved, revendaData }) {
                             </div>
                             <div className="form-group-ana form-group-half">
                                 <label>Razão Social</label>
-                                <input type="razaoSocial" name="razaoSocial" value={form.razaoSocial} onChange={handleChange} className="form-control" />
+                                <input type="razaoSocial" name="razaoSocial" value={form.razaoSocial} onChange={handleChange} required className="form-control"  />
                             </div>                           
                         </div>
                             <div className="modal-actions">

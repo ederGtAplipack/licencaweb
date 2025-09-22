@@ -6,10 +6,11 @@
     "\\src\\components\\Licencas",
     "\\src\\components\\Pages",
     "\\src\\components\\Pages\\Anagrafica",
-    "\\src\\components\\Pages\\Home",
+    "\\src\\components\\Pages\\Revendas",
     "\\src\\components\\Pages\\Usuario",
     "\\src\\Layouts",
     "\\src\\services"
   ],
+  "SelectedNode": "\\src\\components\\Pages\\Anagrafica\\AnagraficaModal.js",
   "PreviewInSolutionExplorer": false
 }
