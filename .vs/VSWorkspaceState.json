@@ -3,14 +3,14 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Licencas",
+    "\\src\\components\\Login",
     "\\src\\components\\Pages",
     "\\src\\components\\Pages\\Anagrafica",
-    "\\src\\components\\Pages\\Revendas",
-    "\\src\\components\\Pages\\Usuario",
+    "\\src\\components\\Pages\\Contratos",
+    "\\src\\components\\Pages\\Home",
     "\\src\\Layouts",
     "\\src\\services"
   ],
-  "SelectedNode": "\\src\\components\\Pages\\Anagrafica\\AnagraficaModal.js",
+  "SelectedNode": "\\src\\style.css",
   "PreviewInSolutionExplorer": false
 }

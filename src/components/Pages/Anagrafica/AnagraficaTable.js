@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { FaEdit, FaTrash } from 'react-icons/fa'; // Exemplo com 'react-icons'
+import { FaEdit, FaTrash, FaInfoCircle } from 'react-icons/fa'; // Exemplo com 'react-icons'
+import { useNavigate } from "react-router-dom";
 
 export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) {
+    const navigate = useNavigate();
     const [paginaAtual, setPaginaAtual] = useState(1);
     const registrosPorPagina = 12;
 
@@ -11,6 +13,11 @@ export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) 
     const registrosExibidos = anagraficas.slice(indexPrimeiro, indexUltimo);
 
     const totalPaginas = Math.ceil(anagraficas.length / registrosPorPagina);
+
+    const hanleRowClick = (id) => {
+        navigate(`/dashboard/anagrafica/${id}`);
+    };
+
 
     return (
         <div>
@@ -42,14 +49,19 @@ export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) 
                                 <td>{a.cnpj}</td>
                                 <td>{a.telefone}</td>
                                 {/*<td>{a.email}</td>*/}
-                                <td>
+                                <tr>
+                                 <td>
                                     <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
                                         <FaEdit />                                         
                                     </button>
                                     <button className="btn btn-danger-cli" onClick={() => onDelete(a.idAnagrafica)}>
                                         <FaTrash />
+                                        </button>
+                                    <button className="btn btn-info" onClick={() => hanleRowClick(a.idAnagrafica)}>
+                                        <FaInfoCircle />
                                     </button>
-                                </td>
+                                 </td>
+                                </tr>
                             </tr>
                         ))
                     ) : (

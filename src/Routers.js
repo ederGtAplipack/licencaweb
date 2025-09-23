@@ -8,6 +8,7 @@ import AnagraficaPage from "./components/Pages/Anagrafica/AnagraficaPage";
 import UsuarioPage from "./components/Pages/Usuario/UsuarioPage";
 import RevendaPage from "./components/Pages/Revendas/RevendaPage";
 import Contrato from "./components/Pages/Contratos/ContratoPage";
+import AnagraficaDetailsPage from "./components/Pages/Anagrafica/ClienteDetailsPage";
 
 /*
   Componente de rotas da aplicação.
@@ -26,6 +27,7 @@ export default function Routers() {
                     <Route path="home" element={<HomePage />} />
                     <Route path="licencas" element={<LicencasPage />} />
                     <Route path="anagrafica" element={<AnagraficaPage />} />
+                    <Route path="anagrafica/:id" element={<AnagraficaDetailsPage /> } />
                     <Route path="usuario" element={<UsuarioPage />} />
                     <Route path="revendas" element={<RevendaPage />} />
                     <Route path="contratos" element={<Contrato /> } />
