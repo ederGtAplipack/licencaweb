@@ -24,10 +24,10 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
                         <th>Dt. Fim</th>
                         <th>Periodicidade</th>
                         {/*<th>Pag. Em dia</th>*/}
-                        <th>Descrição</th>
+                        <th>Status</th>
                         <th>Dt. Ult.Pag</th>
                         <th>Dt. Pro.Pag</th>
-                        <th>Status Contrato</th>
+                        <th>Descrição Contr.</th>
                         <th>Ações</th>
                     </tr>
                 </thead>

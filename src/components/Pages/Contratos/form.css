@@ -76,6 +76,17 @@
     color: #555;
 }
 
+.status-contrato {
+    align-content: revert;
+    align-items: end;
+}
+
+.form-control-static {
+    font-size: 20px;
+    color: #155724;
+    font-display: initial;
+}
+
 .form-group-ana .form-control {
     padding: 12px;
     border: 1px solid #e0e0e0;
@@ -284,4 +295,34 @@
         .pagination .btn:hover:not(:disabled) {
             background: #0056b3;
         }
+
+/*possíveis status (Ativo, A vencer, Vencido, Não encontrado) 
+    para serem exibidos como um badge colorido no ContratoModal.js*/
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    min-width: 100px;
+}
+
+.badge-success {
+    background-color: #28a745; /* verde */
+}
+
+.badge-warning {
+    background-color: #ffc107; /* amarelo */
+    color: #212529;
+}
+
+.badge-danger {
+    background-color: #dc3545; /* vermelho */
+}
+
+.badge-secondary {
+    background-color: #6c757d; /* cinza */
+}
 

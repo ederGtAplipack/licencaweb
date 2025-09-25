@@ -20,8 +20,8 @@ const MessageModal = ({ type, message, onClear }) => {
 const initialState = {
     idCliente: "",
     plano: "",
-    qtdLicencas: "",
-    dataIncio: "",
+    qtdlicencas: "",
+    dataInicio: "",
     datafim: "",
     periodicidade: "",
     pagamentoEmDia: "",
@@ -45,46 +45,28 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
     // Efeito para sincronizar o estado do formulário com a prop ContratoData
     // Isso garante que o formulário seja preenchido corretamente para edições
     useEffect(() => {
-        setForm(ContratoData || initialState);
+        if (ContratoData) {
+            // Formata as datas para o formato yyyy-MM-dd
+            const formattedData = {
+                ...ContratoData,
+                dataInicio: ContratoData.dataInicio ? ContratoData.dataInicio.substring(10, 0) : "",
+                datafim: ContratoData.datafim ? ContratoData.datafim.substring(10, 0) : "",
+                dataProximoPagamento: ContratoData.dataProximoPagamento ? ContratoData.dataProximoPagamento.substring(0, 10) : "",
+                dataUltimoPagamento: ContratoData.dataUltimoPagamento ? ContratoData.dataUltimoPagamento.substring(0, 10) : "",
+                // Inclua outras datas se necessário, como dataProximoPagamento
+                // dataProximoPagamento: ContratoData.dataProximoPagamento ? ContratoData.dataProximoPagamento.substring(0, 10) : "",
+            };
+            setForm(formattedData);
+        } else {
+            setForm(initialState);
+        }
     }, [ContratoData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
-
-    /*SOMENETE PARA CADASTRO */
-    /*
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setMensagem(null);
-        try {
-            const payload = {
-                ...form,
-                idContrato: parseInt(form.idContrato, 10) || 0,
-                idRevenda: parseInt(form.idRevenda, 10) || 0
-            };
-
-            await api.post("/api/v1/Contrato/CreateContrato", payload);
-            setMensagem({
-                type: "success",
-                text: "Registro salvo com sucesso!"
-            });
-            
-        } catch (err) {
-            console.error("Erro ao salvar:", err.response?.data || err.message);
-            alert("Erro ao salvar registro.");
-            setMensagem({
-                type: "error",
-                text: "Erro ao salvar Registro."
-            });
-        } finally {
-            setLoading(false);
-        }
-    };*/
-
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -94,12 +76,15 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
                 // Modo de Edição - Envia para o endpoint de atualização
                 await api.put(`/api/v1/Contrato/UpdateContrato/${form.idContrato}`, form);
                 setMensagem({ type: "success", text: "Registro atualizado com sucesso!" });
+                VerificarStatusContrato(form.idContrato); // Atualiza o status após a edição
                 //onClose();
             } else {
                 // Modo de Criação - Envia para o endpoint de criação
                 const { idContrato, ...payload } = form;
                 await api.post("/api/v1/Contrato/CreateNewContrato", payload);
                 setMensagem({ type: "success", text: "Registro salvo com sucesso!" });
+                VerificarStatusContrato(form.idContrato); // Atualiza o status após a criação
+                //setForm(initialState); // Limpa o formulário após salvar
                 //onClose();
             }
         } catch (err) {
@@ -124,6 +109,53 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
         }
     }, [mensagem, onClose, onSaved]);
 
+    // Novo método para buscar o status
+    const VerificarStatusContrato = async (idContrato) => {
+        if (!idContrato) return;
+
+        try {
+            const { data } = await api.get(`/api/v1/Contrato/${idContrato}/status`);
+
+            // Atualiza o statusContrato e a descrição
+            setForm((prev) => ({
+                ...prev,
+                statusContrato: data.statusContrato,
+                statusDescricao: data.statusDescricao || prev.statusDescricao
+            }));
+        } catch (err) {
+            console.error("Erro ao verificar status do contrato:", err.response?.data || err.message);
+            setMensagem({ type: "error", text: "Falha ao verificar status do contrato." });
+        }
+    };
+
+    // Dispara sempre que o idContrato for preenchido ou alterado
+    useEffect(() => {
+        if (form.idContrato) {
+            VerificarStatusContrato(form.idContrato);
+        }
+    }, [form.idContrato]);
+
+
+    // Função para exibir o status como badge colorido
+    const renderStatusBadge = (status) => {
+        let className = "badge";
+        switch (status) {
+            case "Ativo":
+                className += " badge-success"; // verde
+                break;
+            case "A vencer":
+                className += " badge-warning"; // amarelo
+                break;
+            case "Vencido":
+                className += " badge-danger"; // vermelho
+                break;
+            default:
+                className += " badge-secondary"; // cinza
+                break;
+        }
+        return <span className={className}>{status || "Calculando..."}</span>;
+    };
+
     // Renderiza o formulário do modal
     return (
         <div className="modal-overlay">
@@ -136,8 +168,16 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
                                 <label>ID Contrato</label>
                                 <input type="number" name="idContrato" value={form.idContrato} onChange={handleChange} className="form-control" />
                             </div>
-                            <div className="form-group-ana form-group-half">
-
+                            <div className="status-contrato">
+                                <div className="form-group-half">
+                                    <label>Status Contrato</label>
+                                    <p className="form-control-static">
+                                        {renderStatusBadge(form.statusContrato
+                                            ? `${form.statusContrato} (${form.statusDescricao || ""})`
+                                            : "Calculando...")}
+                                    </p>
+                                    {/*<input name="statusContrato" value={form.statusContrato} onChange={handleChange} className="form-control" />*/}
+                                </div>
                             </div>
 
                             {/* segunda linha*/}
@@ -159,7 +199,7 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
 
                             <div className="form-group-ana">
                                 <label>Qtd Licencas</label>
-                                <input name="qtdlicencas" value={form.qtdlicencas} onChange={handleChange} className="form-control" />
+                                <input name="qtdlicencas" type="number" value={form.qtdlicencas} onChange={handleChange} className="form-control" />
                             </div>
 
                             <div className="form-group-ana form-group-half">
@@ -173,7 +213,19 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
 
                             <div className="form-group-ana form-group-half">
                                 <label>Periodicidade</label>
-                                <input name="periodicidade" value={form.periodicidade} onChange={handleChange} className="form-control" />
+                                <select name="periodicidade" value={form.periodicidade} onChange={handleChange} required className="form-control">
+                                    <option value="Diária">Diária</option>
+                                    <option value="Semanal">Semanal</option>
+                                    <option value="Quizenal">Quinzenal</option>
+                                    <option value="Mensal">Mensal</option>
+                                    <option value="Bimestral">Bimestral</option>
+                                    <option value="Trimestral">Trimestral</option>
+                                    <option value="Semestral">Semestral</option>
+                                    <option value="Anual">Anual</option>
+                                    <option value="Bienal">Bienal</option>
+                                    <option value="Trienal">Trienal</option>
+                                    <option value="Perpetua">Perpetua</option>
+                                </select>                                
                             </div>
 
                             {/*<div className="form-group-ana form-group-full">
@@ -181,10 +233,6 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
                                 <input name="pagamentoEmDia" value={form.pagamentoEmDia} onChange={handleChange} className="form-control" />
                             </div>*/}
 
-                            <div className="form-group-ana">
-                                <label>Status Contrato</label>
-                                <input name="statusContrato" value={form.statusContrato} onChange={handleChange} className="form-control" />
-                            </div>
 
                             <div className="form-group-ana">
                                 <label>Status Descricao</label>

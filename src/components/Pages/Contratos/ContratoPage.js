@@ -93,7 +93,7 @@ export default function ContratoPage() {
         const search = filtro.trim().toLowerCase();
         if (!search) return true;
         const values = [
-            String(a.qtdLicencas || ""),
+            String(a.qtdlicencas || ""),
             String(a.dataInicio || ""),
             String(a.datafim || ""),
             String(a.periodicidade || ""),

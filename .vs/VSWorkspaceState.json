@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Login",
     "\\src\\components\\Pages",
     "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Contratos",
@@ -11,6 +11,5 @@
     "\\src\\Layouts",
     "\\src\\services"
   ],
-  "SelectedNode": "\\src\\style.css",
   "PreviewInSolutionExplorer": false
 }
