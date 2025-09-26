@@ -1,11 +1,11 @@
 // src/pages/Contrato/ContratoPage.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "../../../services/api";
 import ContratoTable from "../Contratos/ContratoTable";
 import ContratoModal from "../Contratos/ContratoModal";
 import FilterBar from "../Contratos/FilterBar";
 //import "../../style.css";
-import "./form.css"; 
+import "./Contrato_style.css"; 
 
 // Componente para mensagens de sucesso/erro, reusado do ContratoModal.js
 const MessageModal = ({ type, message, onClear, onConfirm }) => {
@@ -41,27 +41,33 @@ export default function ContratoPage() {
     const [error, setError] = useState("");
     const [filtro, setFiltro] = useState(""); 
     const [ContratoToDeleteId, setContratoToDeleteId] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
 
 
-    const loadData = async () => {
+    // Função para buscar e atualizar o status de todos os contratos
+    const loadData = useCallback( async () => {
         setLoading(true);
+        setError("");
         try {
             const response = await api.get("/api/v1/Contrato/AllContrato");
-            setContratos(response.data);            
+            const contratos = response.data || [];
+            setContratos(contratos);            
+            await fetchStatusForAll(contratos);
         } catch (err) {
             console.error("Erro ao carregar Contratos:", err);            
             setMensagem({ type: "error", text: "Erro ao carregar dados." });
+            setError("Erro ao carregar dados. Tente novamente mais tarde.");
         } finally {
             setLoading(false);
         }
-    };
+    },[]);
 
     useEffect(() => {
         loadData();
     }, []);
 
-    const handleEdit = (Contratos) => {
-        setCurrentContrato(Contratos);
+    const handleEdit = (contratos) => {
+        setCurrentContrato(contratos);
         setShowModal(true);
     };
 
@@ -87,6 +93,43 @@ export default function ContratoPage() {
             setContratoToDeleteId(null);
         }
     };
+
+    const fetchStatusForAll = async (contratos = Contratos, batchSize = 5) => {
+        if (!contratos || contratos.length === 0) return;
+
+        setRefreshing(true);
+
+        try {
+            for (let i = 0; i < contratos.length; i += batchSize) {
+                const batch = contratos.slice(i, i + batchSize);
+                await Promise.all(
+                    batch.map(async (contrato) => {
+                        try {
+                            const statusResponse = await api.get(`/api/v1/Contrato/${contrato.idContrato}/status`);
+                            const updatedStatus = statusResponse.data;
+                            setContratos((prevContratos) =>
+                                prevContratos.map((c) =>
+                                    c.idContrato === contrato.idContrato
+                                        ? { ...c, ...updatedStatus }
+                                        : c
+                                )
+                            );
+                        } catch (statusErr) {
+                            console.error(`Erro ao atualizar status do contrato ${contrato.idContrato}:`, statusErr);
+                        }
+                    })
+                );
+                // Pequena pausa entre os lotes para evitar sobrecarga no servidor
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+        } catch (err) {
+            console.error("Erro ao atualizar status dos contratos:", err);
+            setMensagem({ type: "error", text: "Erro ao atualizar status dos contratos." });
+        } finally {
+            setRefreshing(false);
+        }
+    }
+
            
     // filtro simples (assegure que campos existem e são strings)
     const ContratoFiltradas = Contratos.filter((a) => {
@@ -117,7 +160,8 @@ export default function ContratoPage() {
                 <FilterBar filtro={filtro}
                     setFiltro={setFiltro}
                     total={ContratoFiltradas.length}
-                    onAdd={handleOnAdd} />
+                    onAdd={handleOnAdd}
+                    onRefresh={fetchStatusForAll} />
             </div>
             <div className="card">
              {loading ? (

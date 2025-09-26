@@ -5,7 +5,7 @@ import RevendaTable from "../Revendas/RevendaTable";
 import RevendaModal from "../Revendas/RevendaModal";
 import FilterBar from "../Revendas/FilterBar";
 //import "../../style.css";
-import "./form.css"; 
+import "./Revenda_style.css"; 
 
 // Componente para mensagens de sucesso/erro, reusado do RevendaModal.js
 const MessageModal = ({ type, message, onClear, onConfirm }) => {

@@ -1,8 +1,9 @@
 // src/Pages/Contratos/FilterBar.jsx
 import React from "react";
-import "./form.css";
+import { LuRefreshCw } from "react-icons/lu";
+import "./Contrato_style.css";
 
-export default function FilterBar({ filtro, setFiltro, total = 0, onAdd }) {    
+export default function FilterBar({ filtro, setFiltro, total = 0, onAdd, onRefresh, refreshing = false }) {    
     return (
     <div className="card">
       <div className="card-header">
@@ -26,16 +27,29 @@ export default function FilterBar({ filtro, setFiltro, total = 0, onAdd }) {
                 Filtrando por: <strong>{filtro || "Todos"}</strong>
                 <span style={{ marginLeft: 12 }}>
                     Total: <strong>{total}</strong>
-                        </span>
+                </span>
             </div>
-                    <button className="btn btn-primary-cliente" onClick={() => {
-                        if (onAdd) onAdd();
-                        }}
+            <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                            className="btn btn-secondary"
+                      onClick={() => {
+                        if (onRefresh) onRefresh();
+                      }}
+                      disabled={refreshing}
+                      title="Atualizar status dos contratos"
+                    > 
+                    {refreshing ? "Atualizando..." : "🔄 Atualizar"}
+                </button>
+
+            <button className="btn btn-primary-cliente" onClick={() => {
+               if (onAdd) onAdd();
+                 }}
                     >
                         + Novo Contrato  
-                    </button>
+             </button>
+            </div>
          </div>
-         </div>            
+      </div>            
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../services/api";
-import "./form.css";
+//import "../Anagrafica/Cliente_style.css";
 
 //modal com sucesso ou erro 
 const MessageModal = ({ type, message, onClear }) => {
@@ -126,83 +126,83 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
 
     // Renderiza o formulário do modal
     return (
-        <div className="modal-overlay">
-            <div className="modal-ana">
-                <div className="container-ana">
+        <div className="modal-overlay-cliente">
+            <div className="modal-cliente">
+                <div className="container-cliente">
                     <h2 className="form-title">{form.idAnagrafica ? "Editar Cliente" : "Novo Cliente"}</h2>
                      <form onSubmit={handleSubmit} className="formAnagrafica">
                         <div className="form-grid">
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-cliente form-group-half">
                                 <label>ID</label>
                                 <input type="number" name="idAnagrafica" value={form.idAnagrafica} onChange={handleChange} className="form-control" />
                             </div>
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-cliente form-group-half">
                                 <label>ID Revenda</label>
                                 <input type="number" name="idRevenda" value={form.idRevenda} onChange={handleChange} className="form-control" />
                             </div>
 
                             {/* segunda linha*/}
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-cliente form-group-half">
                                 <label>Razão Social</label>
                                 <input name="razaoSocial" value={form.razaoSocial} onChange={handleChange} required className="form-control" />
                             </div>
 
-                            <div className="form-group-ana forma-group-full">
+                            <div className="form-group-cliente forma-group-full">
                                 <label>Nome Fantasia</label>
                                 <input name="nomeFantasia" value={form.nomeFantasia} onChange={handleChange} required className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>Contato</label>
                                 <input name="contato" value={form.contato} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-cliente form-group-half">
                                 <label>CEP</label>
                                 <input name="cep" value={form.cep} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana form-group-full">
+                            <div className="form-group-cliente form-group-full">
                                 <label>Endereço</label>
                                 <input name="endereco" value={form.endereco} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana form-group-full">
+                            <div className="form-group-cliente form-group-full">
                                 <label>Bairro</label>
                                 <input name="bairro" value={form.bairro} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>Cidade</label>
                                 <input name="cidade" value={form.cidade} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>UF</label>
                                 <input name="uf" value={form.uf} onChange={handleChange} maxLength="2" className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>CNPJ</label>
                                 <input name="cnpj" value={form.cnpj} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>IE</label>
                                 <input name="ie" value={form.ie} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>Telefone</label>
                                 <input name="telefone" value={form.telefone} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>Email</label>
                                 <input type="email" name="email" value={form.email} onChange={handleChange} className="form-control" />
                             </div>
 
-                            <div className="form-group-ana">
+                            <div className="form-group-cliente">
                                 <label>Senha</label>
                                 <input type="password" name="senha" value={form.senha} onChange={handleChange} className="form-control" />
                             </div>

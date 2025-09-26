@@ -1,6 +1,6 @@
 // src/Pages/Anagrafica/FilterBar.jsx
 import React from "react";
-import "./form.css";
+import "./Cliente_style.css";
 
 export default function FilterBar({ filtro, setFiltro, total = 0, onAdd }) {
     /*const [showModal, setShowModal] = useState(false);  

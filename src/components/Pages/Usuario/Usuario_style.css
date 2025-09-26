@@ -1,5 +1,5 @@
-/* Estilos gerais CLIENTES */
-.modal-overlay {
+/* Estilos gerais USUARIO */
+.modal-overlay-usuario {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,18 +12,18 @@
     z-index: 1000;
 }
 
-.modal-ana {
+.modal-usuario {
     background: #eff4ff;
     border-radius: 12px;
     padding: 20px;
-    width: 90%;
+    #width: 90%;
     max-width: 1200px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     animation: slideDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
 }
 
-.container-ana{
+.container-usuario {
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -57,7 +57,8 @@
     gap: 10px;
 }
 
-.form-group-ana {
+/*Estilo dos input*/
+.form-group-usuario {
     display: flex;
     flex-direction: column;
 }
@@ -71,12 +72,12 @@
 }
 
 /* Estilos para label e input */
-.form-group-ana label {
+.form-group-usuario label {
     font-weight: 500;
     color: #555;
 }
 
-.form-group-ana .form-control {
+.form-group-usuario .form-control {
     padding: 12px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -86,7 +87,7 @@
     box-sizing: border-box; /* Garante que padding não adicione largura */
 }
 
-    .form-group-ana .form-control:focus {
+    .form-group-usuario .form-control:focus {
         border-color: #3498db;
         outline: none;
         box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
@@ -98,19 +99,15 @@
     text-align: center;
 }
 
-.btn {
-    padding: 8px 15px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-
-.btn-primary-cliente {
+.btn-primary {
     padding: 12px 24px;
-    background-color: #FFF;
+    background-color: #fff;
     color: #235081;
     border: none;
     border-radius: 8px;
@@ -121,7 +118,7 @@
 }
 
     .btn-primary:hover {
-        background-color: #2980b9;
+        background-color: #bdc3c7;
         transform: translateY(-2px);
     }
 
@@ -130,37 +127,24 @@
         cursor: not-allowed;
     }
 
-
 .btn-secondary {
     background: #6c757d;
     color: #fff;
     margin-right: 10px;
+    padding: 12px 24px;
+    #background-color: #fff;
+    color: #235081;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
     .btn-secondary:hover {
         background: #5a6268;
     }
-
-.btn-secondary-cli {
-    background: #6c757d;
-    color: #fff;
-    margin-right: 10px;
-}
-
-.btn-secondary:hover {
-    background: #5a6268;
-}
-
-.btn-danger-cli {
-    background: #ba6e66;
-    color: #fff;
-    margin-right: 10px;
-}
-
-.btn-danger:hover {
-    background: #c82333;
-}
-
 
 
 /* Mensagem de sucesso/erro */
@@ -246,6 +230,46 @@
     border-radius: 6px;
 }
 
+/* Container de sobreposição para o modal de mensagem */
+.message-modal-overlay {
+    position: fixed; /* Ou 'absolute' se o pai 'modal-usuario' tiver position: relative; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente para destacar a mensagem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001; /* Garante que fique acima de outros elementos, como o modal principal (que geralmente tem z-index: 1000) */
+}
+
+/* Conteúdo da mensagem de feedback */
+.message-content {
+    background-color: #fff;
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1002;
+    max-width: 400px;
+}
+
+    .message-content p {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+    }
+
+    .message-content.success {
+        border-left: 5px solid #28a745;
+    }
+
+    .message-content.error {
+        border-left: 5px solid #dc3545;
+    }
+
+
+
 /* Cor diferenciada para sucesso/erro */
 .toast-success {
     border-left: 6px solid #28a745;
@@ -284,4 +308,3 @@
         .pagination .btn:hover:not(:disabled) {
             background: #0056b3;
         }
-

@@ -1,7 +1,7 @@
 // src/components/Usuario/UsuarioModal.js
 import React, { useEffect, useState } from "react";
 import api from "../../../services/api";
-import "./form.css";
+import "./Usuario_style.css";
 
 // Componente para a mensagem de feedback
 const MessageModal = ({ type, message, onClear }) => {
@@ -113,7 +113,7 @@ export default function UsuarioModal({ onClose, onSaved }) {
     }, [mensagem, onClose, onSaved]);
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay-usuario">
             <div className="modal-usuario">
                 <div className="container-usuario">
                     <h3 className="form-title">Novo Usuário</h3>

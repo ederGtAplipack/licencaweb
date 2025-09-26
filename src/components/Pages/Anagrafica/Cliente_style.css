@@ -1,5 +1,5 @@
 /* Estilos gerais CLIENTES */
-.modal-overlay {
+.modal-overlay-cliente {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +12,7 @@
     z-index: 1000;
 }
 
-.modal-ana {
+.modal-cliente {
     background: #eff4ff;
     border-radius: 12px;
     padding: 20px;
@@ -23,7 +23,7 @@
     position: relative;
 }
 
-.container-ana{
+.container-cliente{
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -57,14 +57,14 @@
     gap: 10px;
 }
 
-.form-group-ana {
+.form-group-cliente {
     display: flex;
     flex-direction: column;
 }
 
-.form-group-full {
+/*.form-group-full {
     grid-column: 1 / -1;
-}
+}*/
 
 .form-group-half {
     grid-column: span 1;
@@ -74,17 +74,6 @@
 .form-group-ana label {
     font-weight: 500;
     color: #555;
-}
-
-.status-contrato {
-    align-content: revert;
-    align-items: end;
-}
-
-.form-control-static {
-    font-size: 20px;
-    color: #155724;
-    font-display: initial;
 }
 
 .form-group-ana .form-control {
@@ -164,6 +153,12 @@
 
 .btn-danger-cli {
     background: #ba6e66;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.btn-info {
+    background: #235081;
     color: #fff;
     margin-right: 10px;
 }
@@ -296,33 +291,94 @@
             background: #0056b3;
         }
 
-/*possíveis status (Ativo, A vencer, Vencido, Não encontrado) 
-    para serem exibidos como um badge colorido no ContratoModal.js*/
-.badge {
-    display: inline-block;
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    font-weight: bold;
+
+/* Estilos para o card principal do conteúdo */
+.card-details {
+    background: var(--card-bg);
+    padding: 2rem;
     border-radius: 8px;
-    color: #fff;
-    text-align: center;
-    min-width: 100px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 1.5rem;
 }
 
-.badge-success {
-    background-color: #28a745; /* verde */
+/* Estilos para os títulos */
+.main-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
 }
 
-.badge-warning {
-    background-color: #ffc107; /* amarelo */
-    color: #212529;
+.sub-title {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.badge-danger {
-    background-color: #dc3545; /* vermelho */
+/* Estilos para as abas */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
 }
 
-.badge-secondary {
-    background-color: #6c757d; /* cinza */
+.tab-button {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
 }
 
+.tab-button:hover {
+    color: var(--primary-color);
+}
+
+.tab-button.active {
+    color: var(--primary-color);
+    font-weight: bold;
+    border-bottom-color: var(--primary-color);
+}
+
+/* Estilos para o conteúdo das abas */
+.tab-content {
+    background: var(--bg-color);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.details-section {
+    /*display: grid;*/
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.details-section p {
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.details-section p strong {
+    color: var(--heading-color);
+}
+
+/* Estilos para os botões de ação na seção de detalhes, se necessário */
+.action-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-edit {
+    background-color: #2196F3;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}

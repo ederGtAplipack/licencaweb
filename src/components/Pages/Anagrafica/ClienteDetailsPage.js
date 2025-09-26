@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../../services/api";
-import "./form.css";
+import "./Cliente_style.css";
 
 export default function ClienteDetailsPage() {
     const { id } = useParams(); // Obtém o ID da URL

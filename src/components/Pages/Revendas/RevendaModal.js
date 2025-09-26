@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../services/api";
-import "./form.css";
+import "../Revendas/Revenda_style.css";
 
 //modal com sucesso ou erro 
 const MessageModal = ({ type, message, onClear }) => {
@@ -81,19 +81,19 @@ export default function RevendaModal({ onClose, onSaved, revendaData }) {
 
     // Renderiza o formulário do modal
     return (
-        <div className="modal-overlay">
-            <div className="modal-ana">
-                <div className="container-ana">
+        <div className="modal-overlay-revenda">
+            <div className="modal-revenda">
+                <div className="container-revenda">
                     <h2 className="form-title">{form.idRevenda ? "Editar Revenda" : "Nova Revenda"}</h2>
-                     <form onSubmit={handleSubmit} className="formAnagrafica">
+                     <form onSubmit={handleSubmit}>
                         <div className="form-grid">
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-revenda form-group-half">
                                 <label>ID</label>
                                 <input type="number" name="idRevenda" value={form.idRevenda} onChange={handleChange} className="form-control" disabled={!!form.idRevenda}
                                     style={{ display: form.idRevenda ? 'block' : 'none' }}
                                 />
                             </div>
-                            <div className="form-group-ana form-group-half">
+                            <div className="form-group-revenda form-group-half">
                                 <label>Razão Social</label>
                                 <input type="razaoSocial" name="razaoSocial" value={form.razaoSocial} onChange={handleChange} required className="form-control"  />
                             </div>                           

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEdit, FaTrash } from 'react-icons/fa'; // Exemplo com 'react-icons'
+import { formatDateISOToBR } from "../../../utils/date";
 
 export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
     const [paginaAtual, setPaginaAtual] = useState(1);
@@ -12,22 +13,43 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
 
     const totalPaginas = Math.ceil(Contratos.length / registrosPorPagina);
 
+    // Função para exibir o status como badge colorido
+    const renderStatusBadge = (status) => {
+        let className = "badge";
+        switch (status) {
+            case "Ativo":
+                className += " badge-success"; // verde
+                break;
+            case "A vencer":
+                className += " badge-warning"; // amarelo
+                break;
+            case "Vencido":
+                className += " badge-danger"; // vermelho
+                break;
+            default:
+                className += " badge-secondary"; // cinza
+                break;
+        }
+        return <span className={className}>{status || "Calculando..."}</span>;
+    };
+
     return (
         <div>
             <table className="session-table">
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Cliente (Razão Social)</th>
                         <th>Plano</th>
                         <th>Qtd. Licencas</th>
-                        <th>Dt. Início</th>
-                        <th>Dt. Fim</th>
+                        <th>Data Início</th>
+                        <th>Data Fim</th>
                         <th>Periodicidade</th>
                         {/*<th>Pag. Em dia</th>*/}
                         <th>Status</th>
-                        <th>Dt. Ult.Pag</th>
-                        <th>Dt. Pro.Pag</th>
-                        <th>Descrição Contr.</th>
+                        {/*<th>Dt. Ult.Pag</th>
+                        <th>Dt. Pro.Pag</th>*/}
+                        <th>Descrição Contrato</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -35,16 +57,17 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
                     {registrosExibidos.length > 0 ? (
                         registrosExibidos.map((a) => (
                             <tr key={a.idContrato}>
-                                <td>{a.idContrato}</td>
-                                <td>{a.plano}</td>
+                                <td>{a.idContrato ?? a.idContrato}</td>
+                                <td>{a.razaoSocial || a.idCliente || "-"}</td>
+                                <td>{a.plano || "-"}</td>
                                 <td>{a.qtdlicencas}</td>
-                                <td>{a.dataInicio}</td>
-                                <td>{a.datafim}</td>
+                                <td>{formatDateISOToBR(a.dataInicio)}</td>
+                                <td>{formatDateISOToBR(a.datafim)}</td>
                                 <td>{a.periodicidade}</td>
                                 {/*<td>{a.pagamentoEmDia}</td>*/}
-                                <td>{a.statusContrato}</td>
-                                <td>{a.dataUltimoPagamento}</td>
-                                <td>{a.dataProximoPagamento}</td>
+                                <td>{renderStatusBadge(a.statusContrato || "-")}</td>
+                                {/*<td>{a.dataUltimoPagamento}</td>
+                                <td>{a.dataProximoPagamento}</td>*/}
                                 <td>{a.statusDescricao}</td>
                                 <td>
                                     <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">

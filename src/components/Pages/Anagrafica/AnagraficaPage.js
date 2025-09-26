@@ -5,7 +5,7 @@ import AnagraficaTable from "../Anagrafica/AnagraficaTable";
 import AnagraficaModal from "../Anagrafica/AnagraficaModal";
 import FilterBar from "../Anagrafica/FilterBar";
 //import "../../style.css";
-import "./form.css"; 
+import "../Anagrafica/Cliente_style.css"; 
 
 // Componente para mensagens de sucesso/erro, reusado do AnagraficaModal.js
 const MessageModal = ({ type, message, onClear, onConfirm }) => {

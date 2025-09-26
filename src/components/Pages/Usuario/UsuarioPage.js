@@ -4,7 +4,7 @@ import api from "../../../services/api";
 import UsuarioTable from "../Usuario/UsuarioTable";
 import UsuarioModal from "../Usuario/UsuarioModal";
 import FilterBar from "../Usuario/FilterBar";
-import "./form.css";
+import "./Usuario_style.css";
 
 export default function UsuarioPage() {
     const [usuarios, setUsuarios] = useState([]);
@@ -46,7 +46,7 @@ export default function UsuarioPage() {
     });
 
     return (
-        <div className="container-ana">
+        <div className="container-usuario">
             <br />
             {/* Passa onAdd para abrir modal e total */}
             <FilterBar
