@@ -295,6 +295,34 @@
         .pagination .btn:hover:not(:disabled) {
             background: #0056b3;
         }
+/* Estilos para Versão Compacta */
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-group {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-nav {
+    min-width: 40px;
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.page-indicator {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: center;
+}
+
+
 
 /*possíveis status (Ativo, A vencer, Vencido, Não encontrado) 
     para serem exibidos como um badge colorido no ContratoModal.js*/

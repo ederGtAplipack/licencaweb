@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../services/api";
-//import "../Anagrafica/Cliente_style.css";
+import "../Anagrafica/Cliente_style.css";
 
 //modal com sucesso ou erro 
 const MessageModal = ({ type, message, onClear }) => {
@@ -52,39 +52,7 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
-
-    /*SOMENETE PARA CADASTRO */
-    /*
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setMensagem(null);
-        try {
-            const payload = {
-                ...form,
-                idAnagrafica: parseInt(form.idAnagrafica, 10) || 0,
-                idRevenda: parseInt(form.idRevenda, 10) || 0
-            };
-
-            await api.post("/api/v1/Anagrafica/CreateAnagrafica", payload);
-            setMensagem({
-                type: "success",
-                text: "Registro salvo com sucesso!"
-            });
-            
-        } catch (err) {
-            console.error("Erro ao salvar:", err.response?.data || err.message);
-            alert("Erro ao salvar registro.");
-            setMensagem({
-                type: "error",
-                text: "Erro ao salvar Registro."
-            });
-        } finally {
-            setLoading(false);
-        }
-    };*/
-
-
+      
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -131,7 +99,7 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
                 <div className="container-cliente">
                     <h2 className="form-title">{form.idAnagrafica ? "Editar Cliente" : "Novo Cliente"}</h2>
                      <form onSubmit={handleSubmit} className="formAnagrafica">
-                        <div className="form-grid">
+                        <div className="form-grid-cliente">
                             <div className="form-group-cliente form-group-half">
                                 <label>ID</label>
                                 <input type="number" name="idAnagrafica" value={form.idAnagrafica} onChange={handleChange} className="form-control" />
@@ -208,10 +176,10 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
                             </div>
                         </div>
                             <div className="modal-actions">
-                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                            <button type="submit" className="btn-cliente btn-secondary-cliente" disabled={loading}>
                                     {loading ? "Salvando..." : "Salvar"}
                             </button>
-                                <button type="button" className="btn btn-secondary" onClick={onClose} disabled={loading}>
+                            <button type="button" className="btn-cliente btn-primary-cliente" onClick={onClose} disabled={loading}>
                                     Cancelar
                             </button>
                         </div>

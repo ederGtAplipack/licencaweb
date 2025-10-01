@@ -51,7 +51,7 @@
 }
 
 /* Layout dos campos usando Grid */
-.form-grid {
+.form-grid-cliente {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 10px;
@@ -98,7 +98,7 @@
     text-align: center;
 }
 
-.btn {
+.btn-cliente {
     padding: 8px 15px;
     border-radius: 6px;
     border: none;
@@ -131,8 +131,8 @@
     }
 
 
-.btn-secondary {
-    background: #6c757d;
+.btn-secondary-cliente {
+    background: #0056b3;
     color: #fff;
     margin-right: 10px;
 }
@@ -290,6 +290,58 @@
         .pagination .btn:hover:not(:disabled) {
             background: #0056b3;
         }
+
+/* Estilos para Versão Compacta */
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-group {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-nav {
+    min-width: 40px;
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.page-indicator {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Estados de foco para acessibilidade */
+.btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .btn {
+        min-width: 60px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .page-info,
+    .page-indicator {
+        font-size: 12px;
+    }
+}
 
 
 /* Estilos para o card principal do conteúdo */

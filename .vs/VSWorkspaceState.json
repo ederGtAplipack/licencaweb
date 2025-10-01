@@ -1,15 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\components\\Pages",
-    "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Contratos",
-    "\\src\\components\\Pages\\Home",
-    "\\src\\Layouts",
-    "\\src\\services"
+    "\\src\\services",
+    "\\src\\utils"
   ],
   "PreviewInSolutionExplorer": false
 }

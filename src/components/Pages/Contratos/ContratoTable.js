@@ -4,7 +4,7 @@ import { formatDateISOToBR } from "../../../utils/date";
 
 export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const registrosPorPagina = 12;
+    const registrosPorPagina = 10;
 
     // calcular índices
     const indexUltimo = paginaAtual * registrosPorPagina;
@@ -90,26 +90,53 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
             </table>
 
             {/* Paginação */}
-            {totalPaginas > 1 && (
+             {totalPaginas > 1 && (
                 <div className="pagination">
+                    {/* Botão Primeiro */}
+                    <button
+                        className="btn"
+                        onClick={() => setPaginaAtual(1)}
+                        disabled={paginaAtual === 1}
+                        title="Primeira página"
+                    >
+                        ⏮ Primeiro
+                    </button>
+
+                    {/* Botão Anterior */}
                     <button
                         className="btn"
                         onClick={() => setPaginaAtual((prev) => Math.max(prev - 1, 1))}
                         disabled={paginaAtual === 1}
+                        title="Página anterior"
                     >
                         ◀ Anterior
                     </button>
-                    <span>
+
+                    {/* Indicador de página atual */}
+                    <span className="page-info">
                         Página {paginaAtual} de {totalPaginas}
                     </span>
+
+                    {/* Botão Próxima */}
                     <button
                         className="btn"
                         onClick={() =>
                             setPaginaAtual((prev) => Math.min(prev + 1, totalPaginas))
                         }
                         disabled={paginaAtual === totalPaginas}
+                        title="Próxima página"
                     >
                         Próxima ▶
+                    </button>
+
+                    {/* Botão Último */}
+                    <button
+                        className="btn"
+                        onClick={() => setPaginaAtual(totalPaginas)}
+                        disabled={paginaAtual === totalPaginas}
+                        title="Última página"
+                    >
+                        Último ⏭
                     </button>
                 </div>
             )}

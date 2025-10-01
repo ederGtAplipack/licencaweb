@@ -5,6 +5,11 @@
       "taskLabel": "tarefa-licencaweb",
       "appliesTo": "/",
       "type": "launch"
+    },
+    {
+      "taskLabel": "tarefa-licencaweb",
+      "appliesTo": "/",
+      "type": "launch"
     }
   ]
 }
