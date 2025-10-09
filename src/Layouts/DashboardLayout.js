@@ -54,6 +54,9 @@ export default function DashboardLayout() {
                                 <li>
                                     <Link to="/dashboard/contratos">Contratos</Link>
                                 </li>
+                                <li>
+                                    <Link to="/dashboard/software">Software</Link>
+                                </li>
                             </ul>
                         </nav>
                     </motion.aside>

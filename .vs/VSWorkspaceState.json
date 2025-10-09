@@ -4,9 +4,11 @@
     "\\src",
     "\\src\\components",
     "\\src\\components\\Pages",
-    "\\src\\components\\Pages\\Contratos",
+    "\\src\\components\\Pages\\Software",
+    "\\src\\Layouts",
     "\\src\\services",
     "\\src\\utils"
   ],
+  "SelectedNode": "\\src\\Routers.js",
   "PreviewInSolutionExplorer": false
 }
