@@ -1,4 +1,4 @@
-/* Estilos gerais Contrato */
+/* Estilos gerais LICENCAS */
 body {
     margin: 0;
     font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
@@ -6,7 +6,7 @@ body {
     color: #333;
 }
 
-.modal-overlay-contrato {
+.modal-overlay-licenca {
     position: fixed;
     top: 0;
     left: 0;
@@ -19,36 +19,25 @@ body {
     z-index: 1000;
 }
 
-.modal-contrato {
+.modal-licenca {
     background: #eff4ff;
-    border-radius: 12px;
+    border-radius: 2px;
     padding: 20px;
-    width: 90%;
-    max-width: 1200px;
+    width: 50%;
+    max-width: 800px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     animation: slideDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
 }
 
-.modal-contrato-licenca {
-    background: #eff4ff;
-    border-radius: 12px;
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    animation: slideDown 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-}
-
-.container-contrato {
+.container-licenca{
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* Título do formulário */
-.form-title {
-    font-size: 28px;
+.form-title-licenca {
+    font-size: 40px;
     font-weight: 700;
     text-align: center;
     margin-bottom: 25px;
@@ -75,12 +64,12 @@ body {
     gap: 10px;
 }
 
-/*.form-group-contrato {
+.form-group-licenca {
     display: flex;
     flex-direction: column;
-}*/
+}
 
-.form-group-fullcliente {
+.form-group-fulllicenca {
     grid-column: 1 / -1;
 }
 
@@ -89,23 +78,12 @@ body {
 }
 
 /* Estilos para label e input */
-.form-group-contrato label {
+.form-group-ana label {
     font-weight: 500;
     color: #555;
 }
 
-.status-contrato {
-    align-content: revert;
-    align-items: end;
-}
-
-.form-control-static {
-    font-size: 20px;
-    color: #155724;
-    font-display: initial;
-}
-
-.form-group-contrato .form-control {
+.form-group-ana .form-control {
     padding: 12px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -115,7 +93,7 @@ body {
     box-sizing: border-box; /* Garante que padding não adicione largura */
 }
 
-    .form-group-contrato .form-control:focus {
+    .form-group-ana .form-control:focus {
         border-color: #3498db;
         outline: none;
         box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
@@ -127,20 +105,6 @@ body {
     text-align: center;
 }
 
-.label-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #ba6e66;
-    text-align: left;  
-    text-decoration-color: #155724;
-}
-
-#span {
-    color: red;
-    font-weight: bold;
-}
-
 .btn {
     padding: 8px 15px;
     border-radius: 6px;
@@ -150,11 +114,10 @@ body {
     transition: background 0.3s;
 }
 
-
-.btn-primary-cliente {
+.btn-primary {
     padding: 12px 24px;
-    background-color: #FFF;
-    color: #235081;
+    background-color: #3498db;
+    color: #fff;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
@@ -174,8 +137,8 @@ body {
     }
 
 
-.btn-secondary {
-    background: #2980b9;
+.btn-secondary-licen {
+    background: #6c757d;
     color: #fff;
     margin-right: 10px;
 }
@@ -184,27 +147,15 @@ body {
         background: #5a6268;
     }
 
-.btn-secondary-cli {
-    background: #6c757d;
-    color: #fff;
-    margin-right: 10px;
-}
-
-.btn-secondary:hover {
-    background: #5a6268;
-}
-
-.btn-danger-cli {
+.btn-danger-licen {
     background: #ba6e66;
     color: #fff;
     margin-right: 10px;
 }
 
-.btn-danger:hover {
-    background: #c82333;
-}
-
-
+    .btn-danger:hover {
+        background: #c82333;
+    }
 
 /* Mensagem de sucesso/erro */
 .info {
@@ -327,62 +278,4 @@ body {
         .pagination .btn:hover:not(:disabled) {
             background: #0056b3;
         }
-/* Estilos para Versão Compacta */
-
-.pagination-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.nav-group {
-    display: flex;
-    gap: 4px;
-}
-
-.btn-nav {
-    min-width: 40px;
-    padding: 8px 12px;
-    font-size: 16px;
-}
-
-.page-indicator {
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
-    min-width: 60px;
-    text-align: center;
-}
-
-
-
-/*possíveis status (Ativo, A vencer, Vencido, Não encontrado) 
-    para serem exibidos como um badge colorido no ContratoModal.js*/
-.badge {
-    display: inline-block;
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    border-radius: 8px;
-    color: #fff;
-    text-align: center;
-    min-width: 100px;
-}
-
-.badge-success {
-    background-color: #28a745; /* verde */
-}
-
-.badge-warning {
-    background-color: #ffc107; /* amarelo */
-    color: #212529;
-}
-
-.badge-danger {
-    background-color: #dc3545; /* vermelho */
-}
-
-.badge-secondary {
-    background-color: #6c757d; /* cinza */
-}
 

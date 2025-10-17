@@ -1,7 +1,7 @@
 ﻿// src/components/Licencas/FilterBar.jsx
 import React from "react";
 
-export default function FilterBar({ filtro, setFiltro, total, openCloseModal }) {
+export default function FilterBar({ filtro, setFiltro, total = 0, onAdd }) {
     const [showModal, setShowModal] = React.useState(false); // Local state for modal visibility]
 
     return (
@@ -24,7 +24,10 @@ export default function FilterBar({ filtro, setFiltro, total, openCloseModal }) 
                     </div>
 
                     <div>
-                        <button className="btn btn-primary" onClick={openCloseModal}>
+                        <button className="btn btn-primary" onClick={() => {
+                            if (onAdd) onAdd();
+                        }}
+                        >
                             + Nova Licença
                         </button>
                     </div>

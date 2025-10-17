@@ -30,7 +30,17 @@ export default function FilterBar({ filtro, setFiltro, total = 0, onAdd, onRefre
                 </span>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-                        <button
+               {/*<button
+                   className="btn btn-secondary"
+                      onClick={() => {
+                        if (onRefresh) onRefresh();
+                      }}
+                      disabled={refreshing}
+                        title="Atualizar status dos contratos"
+                        >
+                     {refreshing ? "Gerando..." : "🔄 Gerar Nova Licenca"}
+                        </button>*/}
+                <button
                             className="btn btn-secondary"
                       onClick={() => {
                         if (onRefresh) onRefresh();
@@ -41,12 +51,12 @@ export default function FilterBar({ filtro, setFiltro, total = 0, onAdd, onRefre
                     {refreshing ? "Atualizando..." : "🔄 Atualizar"}
                 </button>
 
-            <button className="btn btn-primary-cliente" onClick={() => {
-               if (onAdd) onAdd();
-                 }}
-                    >
+                <button className="btn btn-primary-cliente" onClick={() => {
+                if (onAdd) onAdd();
+                     }}
+                        >
                         + Novo Contrato  
-             </button>
+                </button>
             </div>
          </div>
       </div>            

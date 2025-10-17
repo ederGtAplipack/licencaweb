@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import api from "../../../services/api";
-import "./form.css";
+import "./LicenseModal.css";
 
 //modal com sucesso ou erro 
 const SuccessModal = ({ message, onClose }) => {

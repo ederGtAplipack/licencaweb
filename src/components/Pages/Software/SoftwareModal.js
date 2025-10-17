@@ -84,7 +84,7 @@ export default function SoftwareModal({ onClose, onSaved, SoftwareData }) {
         <div className="modal-overlay-Software">
             <div className="modal-Software">
                 <div className="container-Software">
-                    <h2 className="form-title">{form.idSoftware ? "Editar Software" : "Nova Software"}</h2>
+                    <h2 className="form-title">{form.idSoftware ? "Editar Software" : "Novo Software"}</h2>
                      <form onSubmit={handleSubmit}>
                         <div className="form-grid">
                             <div className="form-group-Software form-group-half">

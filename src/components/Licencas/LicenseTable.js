@@ -1,13 +1,13 @@
 // src/components/Licencas/LicenseTable.jsx
 import React, { useState } from "react";
-import "./form.css";
+import "./LicenseModal.css";
 import { FaEdit, FaTrash } from 'react-icons/fa'; // Exemplo com 'react-icons'
 import { formatDateISOToBR } from "../../utils/date";
 
-export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
+export default function LicenseTable({ licencas = [], onEdit}) {
     const linhas = Array.isArray(licencas) ? licencas : [];
     const [paginaAtual, setPaginaAtual] = useState(1);
-    const registrosPorPagina = 5;
+    const registrosPorPagina = 8;
 
     // calcular índices
     const indexUltimo = paginaAtual * registrosPorPagina;
@@ -29,19 +29,19 @@ export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
                     <th>Status Contrato</th>
                     <th>Plano Contrato</th>
                     <th>{null}</th>
-                    <th>Chave</th>
-                    <th>Qtd - Licencas Disponiveis</th>
+                        {/*<th>Chave</th>*/}
+                    <th>Lic. Disponiveis</th>
                     <th>Status Chave</th>
-                    <th>Revenda</th>
-                    <th>Razão Revenda</th>
+                        {/*<th>Revenda</th>
+                    <th>Razão Revenda</th>*/}
                     <th>Software</th>
                     <th>{null}</th>
-                    <th>Ident. Device</th>
+                        {/*<th>Ident. Device</th>*/}
                     <th>Status Device</th>
                     <th>{null}</th>
                     <th>Criado em:</th>
                     <th>Ativação</th>
-                    <th>Validade até:</th>
+                    <th>Val. até:</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -56,14 +56,14 @@ export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
                             <td>{l.statusContrato}</td>
                             <td>{l.planoContrato}</td>
                             <td>{null}</td>
-                            <td>{l.chaveLicenca}</td>
+                                {/*<td>{l.chaveLicenca}</td>*/}
                             <td>{l.qtdLicencasContrato}</td>
                             <td>{l.statusChave}</td>
-                            <td>{l.idRevenda_Licenca}</td>
-                            <td>{l.razaoSocialRevenda}</td>
+                                {/*<td>{l.idRevenda_Licenca}</td>
+                            <td>{l.razaoSocialRevenda}</td>*/}
                             <td>{l.nomeSoftware}</td>
                             <td>{null}</td>
-                            <td>{l.deviceFingerprint}</td>
+                                {/*<td>{l.deviceFingerprint}</td>*/}
                             <td>{l.statusLicenca}</td>
                             <td>{null}</td>
                             <td>{formatDateISOToBR(l.dataLic ?? "—")}</td>
@@ -72,9 +72,6 @@ export default function LicenseTable({ licencas = [], onEdit, onDelete }) {
                             <td>
                                 <button className="btn btn-secondary-licen" onClick={() => onEdit(l)}>
                                     <FaEdit />
-                                </button>{" "}
-                                <button className="btn btn-danger-licen" onClick={() => onDelete(l.id)}>
-                                    <FaTrash />
                                 </button>
                             </td>
                         </tr>

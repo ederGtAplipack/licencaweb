@@ -1,198 +1,348 @@
 // src/components/Licencas/LicenseModal.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "../../services/api";
+import "./LicenseModal.css";
 
-/**
- * LicenseModal
- * Props:
- *  - show: boolean
- *  - onClose: fn
- *  - onSaved: fn (chamada após salvar para recarregar lista)
- *  - initial: objeto (quando for edição)
- */
-export default function LicenseModal({ show, onClose, onSaved, initial }) {
-    const [form, setForm] = useState({
-        clienteId: "",     // manter "" quando vazio, number quando selecionado
-        macAddress: "",
-        software: "",
-        ip: "",
-        scade: "",
-        status: "Ativa",
-    });
+// Modal de mensagens (sucesso / erro)
+const MessageModal = ({ type, message, onClear }) => (
+    <div className="modal-overlay">
+        <div className={`message-content ${type}`}>
+            <p>{message}</p>
+            <button onClick={onClear} className="btn-close-success">
+                Ok!
+            </button>
+        </div>
+    </div>
+);
 
-    const [clients, setClients] = useState([]);
-    const [loadingClients, setLoadingClients] = useState(false);
-    const [saving, setSaving] = useState(false);
+const initialFormState = {
+    idCliente: "",
+    tipoLic: "",
+    macAddress: "",
+    idSoftware: "",
+    sistemaOp: "",
+    tipoPc: "",
+    nomeComputador: "",
+    software: "",
+    ip: "",
+    processador: ""
+};
 
-    // Sincroniza form com "initial" (edição) quando modal abrir ou initial mudar
-    useEffect(() => {
-        if (initial) {
-            setForm({
-                clienteId: initial.clienteId ?? initial.idCliente ?? initial.clientId ?? "",
-                macAddress: initial.macAddress ?? initial.mac ?? "",
-                software: initial.software ?? "",
-                ip: initial.ip ?? "",
-                scade: initial.scade ? (initial.scade.split?.("T")[0] ?? initial.scade) : "",
-                status: initial.status ?? "Ativa",
-            });
-        } else {
-            setForm({
-                clienteId: "",
-                macAddress: "",
-                software: "",
-                ip: "",
-                scade: "",
-                status: "Ativa",
-            });
+export default function LicenseModal({ onClose, onSaved, licencaData }) {
+    const [form, setForm] = useState(licencaData || initialFormState);
+    const [loading, setLoading] = useState(false);
+    const [mensagem, setMensagem] = useState(null);
+    const [softwares, setSoftwares] = useState([]);
+    const [idSoftware, setIdSoftware] = useState("");
+    const [error, setError] = useState(null);
+    const [clientes, setClientes] = useState([]);
+
+    // --- Carrega lista de softwares ---
+    const fetchSoftwares = useCallback(async () => {
+        try {
+            // Se você estiver usando o 'api' de ContratoPage, substitua o fetch
+            const response = await api.get("/api/v1/Software/AllSoftware");
+
+            setSoftwares(response.data);
+
+        } catch (error) {
+            console.error("Erro na comunicação para buscar softwares:", error);
+
+            // CORREÇÃO 2: Tratamento de erro específico para axios (incluindo o 404)
+            let errorMessage = "Não foi possível carregar a lista de softwares.";
+
+            if (error.response) {
+                // O servidor respondeu com um status code fora da faixa 2xx
+                errorMessage = `Erro HTTP ${error.response.status}. Verifique a rota da API no backend.`;
+            } else if (error.request) {
+                // A requisição foi feita, mas não houve resposta (ex: erro de rede)
+                errorMessage = "Erro de rede: O servidor não está acessível.";
+            }
+
+            setError(errorMessage);
         }
-    }, [initial, show]);
+    }, []);
 
-    // Carrega clientes quando modal abre
+
+    // --- Carrega lista de clientes (anagráfica) ---
     useEffect(() => {
-        if (!show) return;
-
-        const loadClients = async () => {
-            setLoadingClients(true);
+        const fetchClientes = async () => {
             try {
-                // Tenta endpoints comuns — ajuste conforme API real
-                const tryEndpoints = [
-                    "api/v1/Licencaquery/GetAllWithDetails",   // endpoint ideal
-                ];
-
-                let resp = null;
-                for (const ep of tryEndpoints) {
-                    try {
-                        resp = await api.get(ep);
-                        if (resp?.data) break;
-                    } catch (err) {
-                        resp = null;
+                const response = await api.get("/api/v1/Anagrafica/AllAnagrafica");
+                const data = response.data || [];
+                // Normaliza cada registro para um shape previsível { id, razaoSocial, ... }
+                const normalized = data.map((r, i) => {
+                    if (!r || typeof r === "string") {
+                        return { id: `cliente-${i}`, razaoSocial: String(r || `Cliente ${i}`) };
                     }
-                }
-
-                const data = resp?.data ?? [];
-                if (Array.isArray(data)) {
-                    setClients(data);
-                } else {
-                    // se o endpoint retornar um objeto com nested list (incomum), tente extrair
-                    setClients(Array.isArray(data.items) ? data.items : []);
-                }
+                    return {
+                        id: r.id ?? r.idAnagrafica ?? r.idCliente ?? r.id_cliente ?? r.Id ?? null,
+                        razaoSocial: r.razaoSocial ?? r.nome ?? r.razao_social ?? r.RazaoSocial ?? ""
+                    };
+                });
+                setClientes(normalized);
             } catch (err) {
-                console.error("Erro ao carregar clientes:", err);
-                setClients([]);
-            } finally {
-                setLoadingClients(false);
+                console.error("Erro ao carregar Clientes:", err);
+                setClientes([]);
             }
         };
+        fetchClientes();
+    }, []);
 
-        loadClients();
-    }, [show]);
+    // --- Função handleClienteSelect corrigida ---
+    const handleClienteSelect = (e) => {
+        const selectedId = e.target.value;
+        const selectedCliente = clientes.find(
+            (cliente) => String(cliente.id) === String(selectedId)
+        );
 
-    // Handle change — converte clienteId para number (ou "" se vazio)
+        if (selectedCliente) {
+            setForm((prevForm) => ({
+                ...prevForm,
+                idCliente: selectedId,
+                razaoSocial: selectedCliente.razaoSocial,
+            }));
+        } else {
+            setForm((prevForm) => ({
+                ...prevForm,
+                idCliente: selectedId,
+                razaoSocial: "",
+            }));
+        }
+    };
+
+    // Efeito para carregar os softwares quando o modal for aberto
+    useEffect(() => {
+        fetchSoftwares();
+    }, [fetchSoftwares]);
+
+    // Atualiza formulário quando licencaData mudar
+    useEffect(() => {
+        setForm(licencaData || initialFormState);
+    }, [licencaData]);
+
+    // Handler genérico de inputs
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === "clienteId") {
-            // select sempre retorna string; convert to number or ""
-            if (value === "" || value === null) {
-                setForm((p) => ({ ...p, [name]: "" }));
-            } else {
-                const num = Number(value);
-                setForm((p) => ({ ...p, [name]: Number.isNaN(num) ? "" : num }));
-            }
-        } else {
-            setForm((p) => ({ ...p, [name]: value }));
-        }
+        setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Submit - envia payload com idCliente (number)
+    // Submissão do formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setMensagem(null);
 
-        // valida simples: exige cliente selecionado
-        if (!form.clienteId) {
-            alert("Selecione um cliente válido antes de salvar.");
-            return;
-        }
-
-        setSaving(true);
         try {
             const payload = {
-                // backend parece esperar idCliente no root (mensagem de erro anterior)
-                idCliente: Number(form.clienteId),
-                macAddress: form.macAddress || null,
-                software: form.software || null,
-                ip: form.ip || null,
-                scade: form.scade ? new Date(form.scade).toISOString() : null,
-                status: form.status ?? "Ativa",
+                idCliente: Number(form.idCliente) || 0,
+                tipoLic: form.tipoLic || "Desconhecido",
+                macAddress: form.macAddress || "00:00:00:00:00:00",
+                idSoftware: Number(form.idSoftware) || 0,
+                sistemaOp: form.sistemaOp || "",
+                tipoPc: form.tipoPc || "",
+                nomeComputador: form.nomeComputador || "",
+                software: form.software || "",
+                ip: form.ip || "",
+                processador: form.processador || ""
             };
 
-            // logs para debugging — confira no console e network
-            console.log("Payload CreateNewLin:", payload, "type idCliente:", typeof payload.idCliente);
+            console.log("Payload a ser enviado:", payload);
 
-            if (initial && initial.id) {
-                // edição
-                await api.put(`api/v1/licenca/${initial.id}`, payload);
+            if (form.numLic) {
+                // Editar licença existente
+                await api.put(`/api/v1/Licenca/${form.numLic}`, form);
+                setMensagem({ type: "success", text: "Licença atualizada com sucesso!" });
             } else {
-                // criação
-                await api.post("CreateNewLin", payload);
+                // Criar nova licença
+                const { numLic, ...payload } = form;
+                await api.post("/api/v1/Licenca/createNewLicenca", payload);
+                setMensagem({ type: "success", text: "Licença criada com sucesso!" });
             }
-
-            // chama callback para recarregar lista no dashboard
-            onSaved?.();
-            onClose?.();
         } catch (err) {
-            console.error("Erro salvar licença:", err?.response?.data ?? err?.message ?? err);
-            const serverMsg = err?.response?.data ?? err?.message;
-            alert("Erro ao salvar licença. Veja o console para detalhes.\n" + (serverMsg ? JSON.stringify(serverMsg) : ""));
+            console.error("Erro ao salvar licença:", err);
+            setMensagem({ type: "error", text: "Erro ao salvar licença." });
         } finally {
-            setSaving(false);
+            setLoading(false);
         }
     };
 
-    if (!show) return null;
+    // Fecha mensagem de sucesso automaticamente após 5 segundos
+    useEffect(() => {
+        if (mensagem?.type === "success") {
+            const timer = setTimeout(() => {
+                setMensagem(null);
+                if (onSaved) onSaved();
+                onClose();
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [mensagem, onSaved, onClose]);
 
+    // --- Render ---
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <h2 className="modal-title">{initial?.id ? "Editar Licença" : "Nova Licença"}</h2>
 
-                <form onSubmit={handleSubmit}>
-                    
+        <div className="login-container">
+            <div className="login-box">
+                <div className="modal-overlay-licenca">
+                    <div className="modal-licenca">
+                        <div className="container-licenca">
+                            <h2 className="form-title-licenca">
+                                {licencaData?.numLic ? "Editar Licença" : "Nova Licença"}
+                            </h2>
 
-                    <div className="form-group">
-                        <label>Cliente</label>
-                        <input name="clienteId" value={form.clienteId} onChange={handleChange} className="form-control" />
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-grid">
+                                    <div className="form-group form-group-fulllicenca">
+                                        <label>ID Cliente</label>
+                                        <select
+                                            name="idCliente"
+                                            value={form.idCliente || ""}
+                                            onChange={licencaData ? undefined : handleClienteSelect} // Desabilita mudança se em modo de edição
+                                            className={`form-control ${licencaData ? 'disabled-field' : ''}`}
+                                            required
+                                            disabled={!!licencaData}  // Desabilita se estiver em modo de edição
+
+                                        >
+                                            <option value="">-- Selecione --</option>
+                                            {clientes.map((cliente, i) => (
+                                                <option key={cliente.id || i} value={String(cliente.id)}>
+                                                    {cliente.razaoSocial}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Tipo Licença</label>
+                                        <input
+                                            name="tipoLic"
+                                            value={form.tipoLic}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>MAC Address</label>
+                                        <input
+                                            name="macAddress"
+                                            value={form.macAddress}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Software</label>
+                                        <select
+                                            value={idSoftware}
+                                            onChange={e => setIdSoftware(e.target.value)}
+                                            className="form-control"
+                                            aria-label="Selecionar software"
+                                        >
+                                            <option value="">-- selecione --</option>
+                                            {softwares.map(sw => (
+                                                <option key={sw.idSoftware} value={sw.idSoftware}>
+                                                    {sw.descricao}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Sistema Operacional</label>
+                                        <input
+                                            name="sistemaOp"
+                                            value={form.sistemaOp}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Tipo PC</label>
+                                        <input
+                                            name="tipoPc"
+                                            value={form.tipoPc}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Nome do Computador</label>
+                                        <input
+                                            name="nomeComputador"
+                                            value={form.nomeComputador}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    {/*<div className="form-group">
+                                        <label>Software</label>
+                                        <input
+                                            name="software"
+                                            value={form.software}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>*/}
+
+                                    <div className="form-group">
+                                        <label>IP</label>
+                                        <input
+                                            name="ip"
+                                            value={form.ip}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label>Processador</label>
+                                        <input
+                                            name="processador"
+                                            value={form.processador}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+
+                                    <div className="modal-actions">
+                                        <button
+                                            type="button"
+                                            onClick={onClose}
+                                            className="btn btn-secondary"
+                                            disabled={loading}
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Salvando..." : "Salvar"}
+                                        </button>
+                                    </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <div className="form-group">
-                        <label>MAC</label>
-                        <input name="macAddress" value={form.macAddress} onChange={handleChange} className="form-control" />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Software</label>
-                        <input name="software" value={form.software} onChange={handleChange} className="form-control" />
-                    </div>
-
-                    <div className="form-group">
-                        <label>IP</label>
-                        <input name="ip" value={form.ip} onChange={handleChange} className="form-control" />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Validade</label>
-                        <input type="date" name="scade" value={form.scade} onChange={handleChange} className="form-control" />
-                    </div>
-
-                    <div className="modal-actions">
-                        <button type="button" onClick={onClose} className="btn btn-secondary" disabled={saving}>
-                            Cancelar
-                        </button>
-                        <button type="submit" className="btn btn-primary" disabled={saving}>
-                            {saving ? "Salvando..." : "Salvar"}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
+
+
+            {/* Modal secundário de mensagens */}
+            {mensagem && (
+                <MessageModal
+                    type={mensagem.type}
+                    message={mensagem.text}
+                    onClear={() => setMensagem(null)}
+                />
+            )}
         </div>
     );
 }

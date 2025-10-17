@@ -183,7 +183,6 @@ export default function AnagraficaModal({ onClose, onSaved, anagraficaData }) {
                                     Cancelar
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>

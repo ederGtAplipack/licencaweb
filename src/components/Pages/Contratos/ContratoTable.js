@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { FaEdit, FaTrash } from 'react-icons/fa'; // Exemplo com 'react-icons'
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa'; // Exemplo com 'react-icons'
+import { BiSelectMultiple } from "react-icons/bi";
+
 import { formatDateISOToBR } from "../../../utils/date";
 
-export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
+export default function ContratoTable({ Contratos = [], onEdit, onDelete, onGenerateLicenses}) {
     const [paginaAtual, setPaginaAtual] = useState(1);
     const registrosPorPagina = 10;
 
@@ -70,12 +72,17 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete }) {
                                 <td>{a.dataProximoPagamento}</td>*/}
                                 <td>{a.statusDescricao}</td>
                                 <td>
-                                    <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
-                                        <FaEdit />                                         
-                                    </button>
-                                    <button className="btn btn-danger-cli" onClick={() => onDelete(a.idContrato)}>
-                                        <FaTrash />
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '1px' }}> {/* Adicionado um container flexível */}
+                                        <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
+                                            <FaEdit />                                         
+                                        </button>
+                                        <button className="btn btn-danger-cli" onClick={() => onDelete(a.idContrato)}>
+                                            <FaTrash />
+                                        </button>
+                                        <button className="btn btn-info" onClick={() => onGenerateLicenses(a)} title="Gerar Licenças">
+                                            <FaPlus />
+                                        </button>                                    
+                                    </div>
                                 </td>
                             </tr>
                         ))

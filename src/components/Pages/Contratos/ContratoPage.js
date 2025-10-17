@@ -3,9 +3,9 @@ import React, { useEffect, useState, useCallback } from "react";
 import api from "../../../services/api";
 import ContratoTable from "../Contratos/ContratoTable";
 import ContratoModal from "../Contratos/ContratoModal";
+import GenerateLicensesModal from "../Contratos/GenerateLicensesModal";
 import FilterBar from "../Contratos/FilterBar";
-//import "../../style.css";
-import "./Contrato_style.css"; 
+import "./Contrato_style.css";
 
 // Componente para mensagens de sucesso/erro, reusado do ContratoModal.js
 const MessageModal = ({ type, message, onClear, onConfirm }) => {
@@ -43,6 +43,13 @@ export default function ContratoPage() {
     const [ContratoToDeleteId, setContratoToDeleteId] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedContrato, setSelectedContrato] = useState(null);
+
+    const handleGenerateLicenses = (contrato) => {
+        setSelectedContrato(contrato);
+        setIsModalOpen(true);
+    };
 
     // Função para buscar e atualizar o status de todos os contratos
     const loadData = useCallback( async () => {
@@ -75,6 +82,11 @@ export default function ContratoPage() {
     const handleDeleteClick = (id) => {
         setContratoToDeleteId(id);
         setMensagem({ type: "confirm", text: "Tem certeza que deseja excluir este registro?" });
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedContrato(null);
     };
 
     // Função que executa a exclusão após a confirmação
@@ -173,6 +185,7 @@ export default function ContratoPage() {
                                 Contratos={ContratoFiltradas}
                                 onEdit={handleEdit}
                                 onDelete={handleDeleteClick}
+                                onGenerateLicenses={handleGenerateLicenses}
                             />
              )}
 
@@ -195,6 +208,17 @@ export default function ContratoPage() {
                         onConfirm={confirmDelete}
                     />
                 )}
+                {isModalOpen && (
+                    <GenerateLicensesModal
+                        show={isModalOpen}
+                        contract={selectedContrato}
+                        onClose={handleCloseModal}
+                        onSuccess={async () => {
+                            await loadData();
+                            handleCloseModal();
+                        }}
+                    />
+                )}                
             </div>
         </div>
     );

@@ -14,10 +14,10 @@ export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) 
 
     const totalPaginas = Math.ceil(anagraficas.length / registrosPorPagina);
 
+    // Navegar para detalhes ao clicar na linha
     const hanleRowClick = (id) => {
         navigate(`/dashboard/anagrafica/${id}`);
     };
-
 
     return (
         <div>

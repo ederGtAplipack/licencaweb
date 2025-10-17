@@ -219,7 +219,7 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
         <div className="modal-overlay-contrato">
             <div className="modal-contrato">
                 <div className="container-contrato">
-                    <h2 className="form-title">{form.idContrato ? "Editar Contrato" : "Novo Contrato"}</h2>
+                    <h2 className="form-title">Licenças {form.idContrato ? "Editar Contrato" : "Novo Contrato"}</h2>
 
                     <form onSubmit={handleSubmit} className="formContrato">
                         <div className="form-grid">
