@@ -22,7 +22,7 @@ export async function deleteLicenca(id) {
 }
 
 export async function generateMultipleLicenses(payload) {
-    const resp = await fetch(`http://192.168.200.34:8080/api/v1/Licenca/createMultipleLicencas`, {
+    const resp = await fetch(`http://192.168.210.78:14900/api/v1/Licenca/createMultipleLicencas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -82,7 +82,7 @@ export async function generateMultipleViaSingleCreates(payload) {
         };
 
         try {
-            const resp = await fetch(`http://192.168.200.34:8080/api/v1/Licenca/createMultipleLicencas`, {
+            const resp = await fetch(`http://192.168.213.135:14900/api/v1/Licenca/createMultipleLicencas`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(singlePayload)

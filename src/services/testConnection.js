@@ -4,7 +4,7 @@ export const testCorsConnection = async () => {
     try {
         console.log('Testing CORS connection to backend...');
 
-        const response = await axios.options('http://localhost:8080/api/v1/Auth/Login', {
+        const response = await axios.options('http://localhost:14900/api/v1/Auth/Login', {
             headers: {
                 'Origin': 'http://localhost:3000',
                 'Access-Control-Request-Method': 'POST',

@@ -40,23 +40,23 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
     // --- Carrega lista de softwares ---
     const fetchSoftwares = useCallback(async () => {
         try {
-            // Se voc√™ estiver usando o 'api' de ContratoPage, substitua o fetch
+            // Se vocÍ estiver usando o 'api' de ContratoPage, substitua o fetch
             const response = await api.get("/api/v1/Software/AllSoftware");
 
             setSoftwares(response.data);
 
         } catch (error) {
-            console.error("Erro na comunica√ß√£o para buscar softwares:", error);
+            console.error("Erro na comunicaÁ„o para buscar softwares:", error);
 
-            // CORRE√á√ÉO 2: Tratamento de erro espec√≠fico para axios (incluindo o 404)
-            let errorMessage = "N√£o foi poss√≠vel carregar a lista de softwares.";
+            // CORRE«√O 2: Tratamento de erro especÌfico para axios (incluindo o 404)
+            let errorMessage = "N„o foi possÌvel carregar a lista de softwares.";
 
             if (error.response) {
                 // O servidor respondeu com um status code fora da faixa 2xx
                 errorMessage = `Erro HTTP ${error.response.status}. Verifique a rota da API no backend.`;
             } else if (error.request) {
-                // A requisi√ß√£o foi feita, mas n√£o houve resposta (ex: erro de rede)
-                errorMessage = "Erro de rede: O servidor n√£o est√° acess√≠vel.";
+                // A requisiÁ„o foi feita, mas n„o houve resposta (ex: erro de rede)
+                errorMessage = "Erro de rede: O servidor n„o est· acessÌvel.";
             }
 
             setError(errorMessage);
@@ -64,13 +64,13 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
     }, []);
 
 
-    // --- Carrega lista de clientes (anagr√°fica) ---
+    // --- Carrega lista de clientes (anagr·fica) ---
     useEffect(() => {
         const fetchClientes = async () => {
             try {
                 const response = await api.get("/api/v1/Anagrafica/AllAnagrafica");
                 const data = response.data || [];
-                // Normaliza cada registro para um shape previs√≠vel { id, razaoSocial, ... }
+                // Normaliza cada registro para um shape previsÌvel { id, razaoSocial, ... }
                 const normalized = data.map((r, i) => {
                     if (!r || typeof r === "string") {
                         return { id: `cliente-${i}`, razaoSocial: String(r || `Cliente ${i}`) };
@@ -89,7 +89,7 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
         fetchClientes();
     }, []);
 
-    // --- Fun√ß√£o handleClienteSelect corrigida ---
+    // --- FunÁ„o handleClienteSelect corrigida ---
     const handleClienteSelect = (e) => {
         const selectedId = e.target.value;
         const selectedCliente = clientes.find(
@@ -116,18 +116,18 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
         fetchSoftwares();
     }, [fetchSoftwares]);
 
-    // Atualiza formul√°rio quando licencaData mudar
+    // Atualiza formul·rio quando licencaData mudar
     useEffect(() => {
         setForm(licencaData || initialFormState);
     }, [licencaData]);
 
-    // Handler gen√©rico de inputs
+    // Handler genÈrico de inputs
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Submiss√£o do formul√°rio
+    // Submiss„o do formul·rio
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -150,24 +150,24 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
             console.log("Payload a ser enviado:", payload);
 
             if (form.numLic) {
-                // Editar licen√ßa existente
+                // Editar licenÁa existente
                 await api.put(`/api/v1/Licenca/${form.numLic}`, form);
-                setMensagem({ type: "success", text: "Licen√ßa atualizada com sucesso!" });
+                setMensagem({ type: "success", text: "LicenÁa atualizada com sucesso!" });
             } else {
-                // Criar nova licen√ßa
+                // Criar nova licenÁa
                 const { numLic, ...payload } = form;
                 await api.post("/api/v1/Licenca/createNewLicenca", payload);
-                setMensagem({ type: "success", text: "Licen√ßa criada com sucesso!" });
+                setMensagem({ type: "success", text: "LicenÁa criada com sucesso!" });
             }
         } catch (err) {
-            console.error("Erro ao salvar licen√ßa:", err);
-            setMensagem({ type: "error", text: "Erro ao salvar licen√ßa." });
+            console.error("Erro ao salvar licenÁa:", err);
+            setMensagem({ type: "error", text: "Erro ao salvar licenÁa." });
         } finally {
             setLoading(false);
         }
     };
 
-    // Fecha mensagem de sucesso automaticamente ap√≥s 5 segundos
+    // Fecha mensagem de sucesso automaticamente apÛs 5 segundos
     useEffect(() => {
         if (mensagem?.type === "success") {
             const timer = setTimeout(() => {
@@ -188,7 +188,7 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                     <div className="modal-licenca">
                         <div className="container-licenca">
                             <h2 className="form-title-licenca">
-                                {licencaData?.numLic ? "Editar Licen√ßa" : "Nova Licen√ßa"}
+                                {licencaData?.numLic ? "Editar LicenÁa" : "Nova LicenÁa"}
                             </h2>
 
                             <form onSubmit={handleSubmit}>
@@ -198,10 +198,10 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                                         <select
                                             name="idCliente"
                                             value={form.idCliente || ""}
-                                            onChange={licencaData ? undefined : handleClienteSelect} // Desabilita mudan√ßa se em modo de edi√ß√£o
+                                            onChange={licencaData ? undefined : handleClienteSelect} // Desabilita mudanÁa se em modo de ediÁ„o
                                             className={`form-control ${licencaData ? 'disabled-field' : ''}`}
                                             required
-                                            disabled={!!licencaData}  // Desabilita se estiver em modo de edi√ß√£o
+                                            disabled={!!licencaData}  // Desabilita se estiver em modo de ediÁ„o
 
                                         >
                                             <option value="">-- Selecione --</option>
@@ -214,7 +214,7 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                                     </div>
 
                                     <div className="form-group">
-                                        <label>Tipo Licen√ßa</label>
+                                        <label>Tipo LicenÁa</label>
                                         <input
                                             name="tipoLic"
                                             value={form.tipoLic}
@@ -311,23 +311,23 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                                     </div>
                                 </div>
 
-                                <div className="modal-actions">
-                                    <button
-                                        type="button"
-                                        onClick={onClose}
-                                        className="btn btn-secondary"
-                                        disabled={loading}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Salvando..." : "Salvar"}
-                                    </button>
-                                </div>
+                                    <div className="modal-actions">
+                                        <button
+                                            type="button"
+                                            onClick={onClose}
+                                            className="btn btn-secondary"
+                                            disabled={loading}
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className="btn btn-primary"
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Salvando..." : "Salvar"}
+                                        </button>
+                                    </div>
                             </form>
                         </div>
                     </div>
@@ -335,7 +335,7 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
             </div>
 
 
-            {/* Modal secund√°rio de mensagens */}
+            {/* Modal secund·rio de mensagens */}
             {mensagem && (
                 <MessageModal
                     type={mensagem.type}
