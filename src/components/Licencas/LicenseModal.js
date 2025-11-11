@@ -1,39 +1,41 @@
-// src/components/Licencas/LicenseModal.jsx
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../../services/api";
 import "./LicenseModal.css";
 
-// Modal de mensagens (sucesso / erro)
 const MessageModal = ({ type, message, onClear }) => (
     <div className="modal-overlay">
         <div className={`message-content ${type}`}>
             <p>{message}</p>
-            <button onClick={onClear} className="btn-close-success">
-                Ok!
-            </button>
+            <button onClick={onClear} className="btn-close-success">Ok !</button>
         </div>
     </div>
 );
 
+/*VERSÃO ATUAL 13:29 */
 const initialFormState = {
     idCliente: "",
+    idSoftware: "",
+    nSoftware: "",
     tipoLic: "",
     macAddress: "",
-    idSoftware: "",
     sistemaOp: "",
     tipoPc: "",
     nomeComputador: "",
-    software: "",
     ip: "",
-    processador: ""
+    processador: "",
+    statusLicenca: "",
+    numLic: "",
+    razaoSocial: "",
+    software: ""
 };
 
-export default function LicenseModal({ onClose, onSaved, licencaData }) {
+export default function LicenseModalSimplificado({ onClose, onSaved, licencaData }) {
     const [form, setForm] = useState(licencaData || initialFormState);
     const [loading, setLoading] = useState(false);
     const [mensagem, setMensagem] = useState(null);
     const [softwares, setSoftwares] = useState([]);
     const [idSoftware, setIdSoftware] = useState("");
+    const [nSoftware, setNSoftware] = useState("");
     const [error, setError] = useState(null);
     const [clientes, setClientes] = useState([]);
 
@@ -63,8 +65,7 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
         }
     }, []);
 
-
-    // --- Carrega lista de clientes (anagráfica) ---
+    // Load clients and software lists
     useEffect(() => {
         const fetchClientes = async () => {
             try {
@@ -89,7 +90,23 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
         fetchClientes();
     }, []);
 
-    // --- Função handleClienteSelect corrigida ---
+    // Efeito para carregar os softwares quando o modal for aberto
+    useEffect(() => {
+        fetchSoftwares();
+    }, [fetchSoftwares]);
+
+    // Atualiza formulário quando licencaData mudar
+    useEffect(() => {
+        setForm(licencaData || initialFormState);
+    }, [licencaData]);
+
+    // Handle input changes generically
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Handle specific selects to update related fields
     const handleClienteSelect = (e) => {
         const selectedId = e.target.value;
         const selectedCliente = clientes.find(
@@ -111,23 +128,13 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
         }
     };
 
-    // Efeito para carregar os softwares quando o modal for aberto
-    useEffect(() => {
-        fetchSoftwares();
-    }, [fetchSoftwares]);
-
-    // Atualiza formulário quando licencaData mudar
-    useEffect(() => {
-        setForm(licencaData || initialFormState);
-    }, [licencaData]);
-
-    // Handler genérico de inputs
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((prev) => ({ ...prev, [name]: value }));
+    const handleSoftwareSelect = (e) => {
+        const selectedId = e.target.value;
+        const software = softwares.find(s => String(s.idSoftware) === selectedId);
+        setForm(prev => ({ ...prev, idSoftware: selectedId, software: software?.descricao ?? "" }));
     };
 
-    // Submissão do formulário
+    // Submit form to create or update license
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -144,14 +151,16 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                 nomeComputador: form.nomeComputador || "",
                 software: form.software || "",
                 ip: form.ip || "",
-                processador: form.processador || ""
+                processador: form.processador || "",
+                numLic: form.numLic || "",
+                statusLicenca: form.statusLicenca,
             };
 
             console.log("Payload a ser enviado:", payload);
 
             if (form.numLic) {
                 // Editar licença existente
-                await api.put(`/api/v1/Licenca/${form.numLic}`, form);
+                await api.put(`/api/v1/Licenca/updateLicenca/${form.numLic}`, form);
                 setMensagem({ type: "success", text: "Licença atualizada com sucesso!" });
             } else {
                 // Criar nova licença
@@ -161,126 +170,154 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
             }
         } catch (err) {
             console.error("Erro ao salvar licença:", err);
+            let errorText = "Erro ao salvar licença.";
+            if (err.response && err.response.data && err.response.data.title) {
+                errorText = err.response.data.title;
+                // Se houver erros de validação mais específicos, você pode detalhar
+                if (err.response.data.errors) {
+                    errorText += " Detalhes: " + JSON.stringify(err.response.data.errors);
+                }
+            }
             setMensagem({ type: "error", text: "Erro ao salvar licença." });
         } finally {
             setLoading(false);
         }
     };
 
-    // Fecha mensagem de sucesso automaticamente após 5 segundos
+    // Auto close modal on success
     useEffect(() => {
         if (mensagem?.type === "success") {
             const timer = setTimeout(() => {
                 setMensagem(null);
                 if (onSaved) onSaved();
                 onClose();
-            }, 5000);
+            }, 3000);
+
             return () => clearTimeout(timer);
         }
     }, [mensagem, onSaved, onClose]);
 
-    // --- Render ---
+    const isEditMode = Boolean(form.numLic);
+
     return (
+        <div className="modal-overlay-licenca">
+            <div className="modal-licenca">
+                <div className="container-licenca">
+                    <h2 className="form-title">
+                        {isEditMode ? "Editar Licença" : "Nova Licença"}
+                    </h2>
 
-        <div className="login-container">
-            <div className="login-box">
-                <div className="modal-overlay-licenca">
-                    <div className="modal-licenca">
-                        <div className="container-licenca">
-                            <h2 className="form-title-licenca">
-                                {licencaData?.numLic ? "Editar Licença" : "Nova Licença"}
-                            </h2>
+                    <form onSubmit={handleSubmit} className="formLicenca">
+                        <div className="form-grid">
+                            <div className="form-group-licenca form-group-full">
+                                <label>Cliente</label>
+                                <select
+                                    name="idCliente"
+                                    value={form.idCliente}
+                                    onChange={handleClienteSelect}
+                                    className="form-control"
+                                    required
+                                    disabled={isEditMode}
+                                >
+                                    <option value="">-- Selecione --</option>
+                                    {clientes.map((c) => (
+                                        <option key={c.id} value={String(c.id)}>
+                                            {c.razaoSocial}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                            <form onSubmit={handleSubmit}>
-                                <div className="form-grid">
-                                    <div className="form-group form-group-fulllicenca">
-                                        <label>ID Cliente</label>
-                                        <select
-                                            name="idCliente"
-                                            value={form.idCliente || ""}
-                                            onChange={licencaData ? undefined : handleClienteSelect} // Desabilita mudança se em modo de edição
-                                            className={`form-control ${licencaData ? 'disabled-field' : ''}`}
-                                            required
-                                            disabled={!!licencaData}  // Desabilita se estiver em modo de edição
+                            {/*<div className="form-group-licenca form-group-full">
+                                <label>Software</label>
+                                <select
+                                    name="idSoftware"
+                                    value={form.idSoftware}
+                                    onChange={handleSoftwareSelect}
+                                    className="form-control"
+                                    required
+                                    disabled={loading}
+                                >
+                                    <option value="">-- Selecione --</option>
+                                    {softwares.map((s) => (
+                                        <option key={s.idSoftware} value={s.idSoftware}>
+                                            {s.descricao}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>*/}
 
-                                        >
-                                            <option value="">-- Selecione --</option>
-                                            {clientes.map((cliente, i) => (
-                                                <option key={cliente.id || i} value={String(cliente.id)}>
-                                                    {cliente.razaoSocial}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            <div className="form-group">
+                                <label>Tipo Licença</label>
+                                <input
+                                    name="tipoLic"
+                                    value={form.tipoLic}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Tipo Licença</label>
-                                        <input
-                                            name="tipoLic"
-                                            value={form.tipoLic}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
+                            <div className="form-group">
+                                <label>MAC Address</label>
+                                <input
+                                    name="macAddress"
+                                    value={form.macAddress}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>MAC Address</label>
-                                        <input
-                                            name="macAddress"
-                                            value={form.macAddress}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
+                            <div className="form-group">
+                                <label>Software</label>
+                                <select
+                                    name="idSoftware"
+                                    value={form.idSoftware}
+                                    onChange={handleSoftwareSelect}
+                                    className="form-control"
+                                    aria-label="Selecionar software"
+                                    required
+                                    disabled={loading}
+                                >
+                                    <option value="">-- selecione --</option>
+                                    {softwares.map(sw => (
+                                        <option key={sw.idSoftware} value={sw.idSoftware}>
+                                            {sw.descricao}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Software</label>
-                                        <select
-                                            value={idSoftware}
-                                            onChange={e => setIdSoftware(e.target.value)}
-                                            className="form-control"
-                                            aria-label="Selecionar software"
-                                        >
-                                            <option value="">-- selecione --</option>
-                                            {softwares.map(sw => (
-                                                <option key={sw.idSoftware} value={sw.idSoftware}>
-                                                    {sw.descricao}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            <div className="form-group">
+                                <label>Sistema Operacional</label>
+                                <input
+                                    name="sistemaOp"
+                                    value={form.sistemaOp}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Sistema Operacional</label>
-                                        <input
-                                            name="sistemaOp"
-                                            value={form.sistemaOp}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
+                            <div className="form-group">
+                                <label>Tipo PC</label>
+                                <input
+                                    name="tipoPc"
+                                    value={form.tipoPc}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Tipo PC</label>
-                                        <input
-                                            name="tipoPc"
-                                            value={form.tipoPc}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
+                            <div className="form-group">
+                                <label>Nome do Computador</label>
+                                <input
+                                    name="nomeComputador"
+                                    value={form.nomeComputador}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Nome do Computador</label>
-                                        <input
-                                            name="nomeComputador"
-                                            value={form.nomeComputador}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
-
-                                    {/*<div className="form-group">
+                            {/*<div className="form-group">
                                         <label>Software</label>
                                         <input
                                             name="software"
@@ -290,52 +327,44 @@ export default function LicenseModal({ onClose, onSaved, licencaData }) {
                                         />
                                     </div>*/}
 
-                                    <div className="form-group">
-                                        <label>IP</label>
-                                        <input
-                                            name="ip"
-                                            value={form.ip}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
+                            <div className="form-group">
+                                <label>IP</label>
+                                <input
+                                    name="ip"
+                                    value={form.ip}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
 
-                                    <div className="form-group">
-                                        <label>Processador</label>
-                                        <input
-                                            name="processador"
-                                            value={form.processador}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="modal-actions">
-                                    <button
-                                        type="button"
-                                        onClick={onClose}
-                                        className="btn btn-secondary"
-                                        disabled={loading}
-                                    >
-                                        Cancelar
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Salvando..." : "Salvar"}
-                                    </button>
-                                </div>
-                            </form>
+                            <div className="form-group">
+                                <label>Processador</label>
+                                <input
+                                    name="processador"
+                                    value={form.processador}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                />
+                            </div>
                         </div>
-                    </div>
+
+                        <div className="modal-actions">
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? "Salvando..." : "Salvar"}
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={onClose}
+                                disabled={loading}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-
-            {/* Modal secundário de mensagens */}
             {mensagem && (
                 <MessageModal
                     type={mensagem.type}

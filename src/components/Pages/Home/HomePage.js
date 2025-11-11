@@ -20,10 +20,11 @@ import {
 
 export default function HomePage() {
     const [licencas, setLicencas] = useState([]);
+    const apiBaseURL = process.env.REACT_APP_API_BASE_URL || "https://licenca-api.aplipack.com.br";
 
     useEffect(() => {
         axios
-            .get("http://192.168.210.78:14900/api/v1/licencaquery/GetAllWithDetails")
+            .get(`${apiBaseURL}/api/v1/licencaquery/GetAllWithDetails`)
             .then((resp) => setLicencas(resp.data))
             .catch((err) => console.error("Erro ao carregar dados:", err));
     }, []);

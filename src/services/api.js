@@ -1,12 +1,31 @@
 import axios from 'axios';
 
+/*function getDefaultApiUrl() {
+    // 1) Variável definida em build (.env.production ou .env.development)
+    if (process.env.REACT_APP_API_URL) {
+        return process.env.REACT_APP_API_URL;
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+        return 'http://localhost:8080'; // URL para desenvolvimento
+    }
+    return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ":" + window.location.port : ""}`;
+}
+
+const apiBaseURL = getDefaultApiUrl();*/
+
+//const apiBaseURL = process.env.REACT_APP_API_BASE_URL || "https://licenca-api.aplipack.com.br";
+
+const apiBaseURL = process.env.REACT_APP_API_BASE_URL || "http://192.168.200.149:8080";
+
     // Instância para a API de Licenças
     const api = axios.create({
 
-        baseURL: "http://192.168.210.78:14900", // Substitua pela URL real da sua API
+        baseURL: apiBaseURL, // Substitua pela URL real da sua API
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json',           
         },
+        withCredentials: false, // Se precisar enviar cookies
     
     });
     api.interceptors.request.use(
@@ -25,3 +44,4 @@ import axios from 'axios';
 
 
 export default api;
+export { apiBaseURL };

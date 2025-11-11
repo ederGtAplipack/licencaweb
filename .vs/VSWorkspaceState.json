@@ -1,14 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\src",
     "\\src\\components",
     "\\src\\components\\Licencas",
     "\\src\\components\\Pages",
+    "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Contratos",
     "\\src\\components\\Pages\\Home",
     "\\src\\Layouts",
-    "\\src\\services",
-    "\\src\\utils"
+    "\\src\\services"
   ],
+  "SelectedNode": "\\src\\services\\api.js",
   "PreviewInSolutionExplorer": false
 }

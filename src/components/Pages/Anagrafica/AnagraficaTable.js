@@ -49,19 +49,17 @@ export default function AnagraficaTable({ anagraficas = [], onEdit, onDelete }) 
                                 <td>{a.cnpj}</td>
                                 <td>{a.telefone}</td>
                                 {/*<td>{a.email}</td>*/}
-                                <tr>
-                                 <td>
-                                    <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
-                                        <FaEdit />                                         
-                                    </button>
-                                    <button className="btn btn-danger-cli" onClick={() => onDelete(a.idAnagrafica)}>
+                                <td>
+                                     <button className="btn btn-secondary-cli" onClick={() => onEdit(a)} title="Editar">
+                                        <FaEdit />
+                                     </button>
+                                     <button className="btn btn-danger-cli" onClick={() => onDelete(a.idAnagrafica)}>
                                         <FaTrash />
-                                        </button>
-                                    <button className="btn btn-info" onClick={() => hanleRowClick(a.idAnagrafica)}>
+                                     </button>
+                                     <button className="btn btn-info" onClick={() => hanleRowClick(a.idAnagrafica)}>
                                         <FaInfoCircle />
-                                    </button>
-                                 </td>
-                                </tr>
+                                     </button>
+                                </td>                                
                             </tr>
                         ))
                     ) : (

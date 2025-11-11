@@ -28,6 +28,22 @@ const MessageModal = ({ type, message, onClear, onConfirm }) => {
         </div>
     );
 };
+
+/*FUNÇÃO PARA EDITAR UM REGISTRO VINDO DO DTO */
+const mapDtoToLicenca = async (numLic, setLoading, setMensagem) => {
+    try {
+        setLoading(true);
+        const response = await api.get(`/api/v1/Licenca/${numLic}`);
+        return response.data;
+    } catch (err) {
+        console.error("Erro ao carregar licença:", err);
+        setMensagem({ type: "error", text: "Erro ao carregar dados da licença." });
+        return null;
+    } finally {
+        setLoading(false);
+    }
+};
+
 export default function LicencasPage() {
     const [licencas, setLicencas] = useState([]);
     const [showModal, setShowModal] = useState(false);  
@@ -50,7 +66,8 @@ export default function LicencasPage() {
     const loadData = async () => {
         setLoading(true);
         try {
-            const response = await api.get("/api/v1/LicencaQuery/GetAllWithDetails");
+            //const response = await api.get("/api/v1/Licenca/GetAll");
+            const response = await api.get("/api/v1/licencaquery/GetAllWithDetails");
             setLicencas(response.data);
         } catch (err) {
             console.error("Erro ao carregar licenças:", err);
@@ -64,10 +81,26 @@ export default function LicencasPage() {
         loadData();
     }, []);
 
-    const handleEditLicense = ( licenca ) => {
-        setCurrentLicencas(licenca);
-        setShowModal(true);
-    }
+ /*Quando o usuário clica no botão Editar:
+    LicenseTable chama onEdit(l) → envia o objeto l (cada linha da tabela);
+    Em LicencasPage, o handleEditLicense recebe esse objeto e faz:*/
+    const handleEditLicense = async (licenca) => {
+        // 🔧 Correção: garante que o campo numLic exista
+        const licencaComNumLic = licenca.numLic ?? licenca.id ?? licenca.idLicenca;
+
+        if (!licencaComNumLic) {
+            setMensagem({ type: "error", text: "Número da licença não encontrado para edição." });
+            return;
+        }
+
+        // Chama a função para mapear o DTO e obter os dados completos da licença
+        const dadosCompletos = await mapDtoToLicenca(licencaComNumLic, setLoading, setMensagem);
+        if (dadosCompletos) {
+            console.log("Editando licença:", dadosCompletos);
+            setCurrentLicencas(dadosCompletos);
+            setShowModal(true);
+        }
+    };
 
     const handleAddLicense = () => {
         setCurrentLicencas(null); 
@@ -84,6 +117,7 @@ export default function LicencasPage() {
             <LicenseTable
                 licencas={licencasFiltradas}
                 onEdit={handleEditLicense}
+                onRefresh={loadData}
             />
             {showModal && (
                 <LicenseModal
