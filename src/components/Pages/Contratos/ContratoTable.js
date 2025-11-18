@@ -4,6 +4,13 @@ import { BiSelectMultiple } from "react-icons/bi";
 
 import { formatDateISOToBR } from "../../../utils/date";
 
+const STATUS_CONSTANTS = {
+    ATIVO: "Ativo",
+    A_VENCER: "A vencer",
+    VENCIDO: "Vencido",
+    CALCULANDO: "Calculando..."
+};
+
 export default function ContratoTable({ Contratos = [], onEdit, onDelete, onGenerateLicenses}) {
     const [paginaAtual, setPaginaAtual] = useState(1);
     const registrosPorPagina = 10;
@@ -19,20 +26,20 @@ export default function ContratoTable({ Contratos = [], onEdit, onDelete, onGene
     const renderStatusBadge = (status) => {
         let className = "badge";
         switch (status) {
-            case "Ativo":
+            case STATUS_CONSTANTS.ATIVO:
                 className += " badge-success"; // verde
                 break;
-            case "A vencer":
+            case STATUS_CONSTANTS.A_VENCER:
                 className += " badge-warning"; // amarelo
                 break;
-            case "Vencido":
+            case STATUS_CONSTANTS.VENCIDO:
                 className += " badge-danger"; // vermelho
                 break;
             default:
                 className += " badge-secondary"; // cinza
                 break;
         }
-        return <span className={className}>{status || "Calculando..."}</span>;
+        return <span className={className}>{status || STATUS_CONSTANTS.CALCULANDO}</span>;
     };
 
     return (

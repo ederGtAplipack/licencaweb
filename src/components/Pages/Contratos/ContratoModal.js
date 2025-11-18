@@ -167,29 +167,27 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
         e.preventDefault();
         setLoading(true);
         setMensagem(null);
-
+        const { statusContrato, statusDescricao, ...payloadBase } = form;
         try {
-            if (form.idContrato) {
+            if (payloadBase.idContrato) {
                 // Edição
-                await api.put(`/api/v1/Contrato/UpdateContrato/${form.idContrato}`, form);
+                // Envia o payloadBase sem os campos de status
+                await api.put(`/api/v1/Contrato/UpdateContrato/${payloadBase.idContrato}`, payloadBase);
                 setMensagem({ type: "success", text: "Registro atualizado com sucesso!" });
-                // Atualiza status após edição
-                VerificarStatusContrato(form.idContrato);
-            } else {
-                // Criação: envia todo payload, mas não inclua idContrato vazio
-                const { idContrato, ...payload } = form;
-                const res = await api.post("/api/v1/Contrato/CreateNewContrato", payload);
 
-                // Se backend retornar o recurso criado (recomendado), captura id e atualiza o formulário
-                // Ex.: { idContrato: 123, ... }
+                // Não é necessário chamar VerificarStatusContrato aqui se o useEffect abaixo já faz isso.
+
+            } else {
+                // Criação: remove idContrato (que é vazio)
+                const { idContrato, ...payloadCreate } = payloadBase;
+                const res = await api.post("/api/v1/Contrato/CreateNewContrato", payloadCreate);
+
                 const created = res?.data;
                 if (created && (created.idContrato || created.id)) {
                     const newId = created.idContrato ?? created.id;
+                    // Ao atualizar o idContrato, o useEffect logo abaixo irá buscar o novo status
                     setForm((prev) => ({ ...prev, idContrato: newId }));
-                    // Busca status do contrato recém-criado
                     VerificarStatusContrato(newId);
-                } else {
-                    // Se não retornou id, podemos tentar simplesmente recarregar na página principal via onSaved
                 }
 
                 setMensagem({ type: "success", text: "Registro salvo com sucesso!" });
@@ -201,6 +199,7 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
             setLoading(false);
         }
     };
+
 
     // Fecha mensagem de sucesso e fecha modal após 5s
     useEffect(() => {
@@ -290,7 +289,7 @@ export default function ContratoModal({ onClose, onSaved, ContratoData }) {
 
                             <div className="form-group-contrato">
                                 <label>Qtd Licencas</label>
-                                <input name="qtdlicencas" type="number" value={form.qtdlicencas ?? ""} onChange={handleChange} className="form-control" />
+                                <input name="qtdlicencas" type="number" value={form.qtdlicencas ?? ""} onChange={handleChange} className="form-control" required />
                             </div>
 
                             <div className="form-group-contrato form-group-half">

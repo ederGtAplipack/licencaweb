@@ -10,6 +10,7 @@ import RevendaPage from "./components/Pages/Revendas/RevendaPage";
 import Contrato from "./components/Pages/Contratos/ContratoPage";
 import AnagraficaDetailsPage from "./components/Pages/Anagrafica/ClienteDetailsPage";
 import SoftwarePage from "./components/Pages/Software/SoftwarePage";
+import LogsPage from "./components/Pages/LogsLicenca/LogPage";
 
 /*
   Componente de rotas da aplicação.
@@ -32,7 +33,8 @@ export default function Routers() {
                     <Route path="usuario" element={<UsuarioPage />} />
                     <Route path="revendas" element={<RevendaPage />} />
                     <Route path="contratos" element={<Contrato />} />
-                    <Route path="software" element={<SoftwarePage />} />    
+                    <Route path="software" element={<SoftwarePage />} />   
+                    <Route path="logslicenca" element={<LogsPage />} />
                 </Route>
             </Routes>
         </Router>

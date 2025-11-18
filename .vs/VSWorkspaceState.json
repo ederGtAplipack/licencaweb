@@ -3,14 +3,13 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Licencas",
     "\\src\\components\\Pages",
-    "\\src\\components\\Pages\\Anagrafica",
     "\\src\\components\\Pages\\Contratos",
-    "\\src\\components\\Pages\\Home",
+    "\\src\\components\\Pages\\LogsLicenca",
+    "\\src\\components\\Pages\\Software",
     "\\src\\Layouts",
-    "\\src\\services"
+    "\\src\\services",
+    "\\src\\utils"
   ],
-  "SelectedNode": "\\src\\services\\api.js",
   "PreviewInSolutionExplorer": false
 }
